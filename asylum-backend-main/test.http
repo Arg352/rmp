@@ -1,0 +1,238 @@
+@baseUrl = http://localhost:3000
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImlhdCI6MTc3OTY1NjE2NCwiZXhwIjoxNzgwMjYwOTY0fQ.u8xr_Y5V65w6o9aASdiOcjCskwB0QcCC2fzwa9FrZX0
+@token2 = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMsImlhdCI6MTc3OTY1Njg2MywiZXhwIjoxNzgwMjYxNjYzfQ.GG3gCrroWcXAaybGzCAapl4Mw1R9sEGgyTP9rpngYnY
+### 1. Регистрация нового пользователя
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "username": "lexa_lepexa",
+  "email": "lyoha228@gmail.com",
+  "password": "password123",
+  "confirmPassword": "password123"
+}
+
+### 2. Ошибка регистрации (разные пароли)
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "username": "mc_bashmak",
+  "email": "bashmak@gmail.com",
+  "password": "password123",
+  "confirmPassword": "123password"
+}
+
+### 3. Вход по email
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "login": "lyoha228@gmail.com",
+  "password": "password123"
+}
+
+### 4. Вход по username
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "login": "lexa_lepexa",
+  "password": "password123"
+}
+
+### 5. Получение своего профиля
+GET {{baseUrl}}/users/me
+Authorization: Bearer {{token}}
+
+### 6. Загрузка фото в Cloudinary
+POST {{baseUrl}}/media/upload
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="images"; filename="test.png"
+Content-Type: image/jpeg
+
+< ./test.png
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### 7. Создание текстового поста (без картинок)
+POST {{baseUrl}}/posts
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "Открытие нового общественного сада",
+  "tags": "#сад #экология",
+  "text": "Городской совет официально открыл новый общественный сад в самом центре города..."
+}
+
+### 8. Создание поста с картинками (Мальдивы)
+POST {{baseUrl}}/posts
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "Был на Мальдивах 😎",
+  "tags": "#отдых #жизнь прекрасна",
+  "text": "Сгонял на время отпуска на Мальдивы, прикладываю фото...",
+  "images": [
+    "https://res.cloudinary.com/drvbghpni/image/upload/v1779483676/asylum/k2ouamuoeyx5idhyasp0.png"
+  ]
+}
+
+### 9. Получение глобальной ленты (Все посты)
+GET {{baseUrl}}/posts/feed
+Authorization: Bearer {{token}}
+
+### 10. Поиск по ленте (Фильтр по хэштегу)
+GET {{baseUrl}}/posts/feed?tag=%23сад
+
+### 11. Поставить/убрать лайк (замени 1 на ID любого твоего поста)
+POST {{baseUrl}}/posts/1/like
+Authorization: Bearer {{token}}
+
+### 12. Регистрация Второго Пользователя
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "username": "aidar7_bikbulatov",
+  "email": "aidar7@gmail.com",
+  "password": "password123",
+  "confirmPassword": "password123"
+}
+
+### 13. Поиск пользователя по логину
+GET {{baseUrl}}/users/search?q=aidar
+Authorization: Bearer {{token}}
+
+### 14. Просмотр чужого профиля (замени 2 на ID Айдара)
+GET {{baseUrl}}/users/2
+Authorization: Bearer {{token}}
+
+### 15. Подписаться на пользователя (замени 2 на ID Айдара)
+POST {{baseUrl}}/users/2/follow
+Authorization: Bearer {{token}}
+
+### 16. Получить список всех чатов
+GET {{baseUrl}}/chats
+Authorization: Bearer {{token}}
+
+### 17. Получить историю с конкретным юзером (замени 2 на ID Айдара)
+GET {{baseUrl}}/chats/2
+Authorization: Bearer {{token}}
+
+### 18. Просмотр своего профиля (до изменений)
+GET {{baseUrl}}/users/me
+Authorization: Bearer {{token}}
+
+### 19. Изменение настроек профиля (как в Figma)
+PATCH {{baseUrl}}/users/settings
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "username": "lexa_lepexa_v2",
+  "notifyOnGroups": true,
+  "notifyOnLikes": false
+}
+
+### 20. Установка красивого профиля (как в Figma)
+PATCH {{baseUrl}}/users/settings
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "displayName": "Лёха Мирный",
+  "bio": "Хотите добавить статус?",
+  "avatarUrl": "https://res.cloudinary.com/drvbghpni/image/upload/v1779483676/asylum/k2ouamuoeyx5idhyasp0.png"
+}
+
+### 21. Проверка итогового профиля
+GET {{baseUrl}}/users/me
+Authorization: Bearer {{token}}
+
+### 22. Создание анонимного поста (для всех)
+POST {{baseUrl}}/posts
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "Секретное откровение",
+  "text": "Никто не узнает, что это написал я...",
+  "isAnonymous": true
+}
+
+### 23. Создание приватного поста (только для Айдара - ID 2)
+POST {{baseUrl}}/posts
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "План на выходные",
+  "text": "Только для своих. Едем на шашлыки.",
+  "visibility": "SELECTED",
+  "allowedUserIds": [2]
+}
+
+### 24. Проверка Ленты (Своими глазами)
+GET {{baseUrl}}/posts/feed
+//Authorization: Bearer {{token}}
+
+### ========================================
+### БЛОК: ТЕСТ МОДЕРАЦИИ ГРУПП
+### ========================================
+
+### 25. Создаем приватную группу (от твоего имени)
+# Важно: запиши ID созданной группы из ответа (например, 1)
+POST {{baseUrl}}/chats/groups
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Секретный клуб",
+  "description": "Только по заявкам",
+  "visibility": "REQUEST"
+}
+
+### 26. Создаем левого юзера (чтобы он подал заявку)
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "username": "new_tester_123",
+  "email": "test@club.com",
+  "password": "password123",
+  "confirmPassword": "password123"
+}
+
+### 27. Логинимся левым юзером
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "login": "test@club.com",
+  "password": "password123"
+}
+
+### токен 
+@tempToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjQsImlhdCI6MTc3OTkxOTU1NCwiZXhwIjoxNzgwNTI0MzU0fQ.qv9MoposSeKB0s_o0MnS0InbfbZXjdEdF62u40fHHmI
+
+### 28. Левый юзер подает заявку в группу (ID группы из шага 25, например 1)
+POST {{baseUrl}}/chats/groups/1/join
+Authorization: Bearer {{tempToken}}
+
+
+### --- ВОЗВРАЩАЕМСЯ К ТВОЕМУ ОСНОВНОМУ АККАУНТУ ({{token}}) ---
+
+### 29. Ты (как админ) смотришь список заявок
+# ID группы = 1. Должен вернуться массив с юзером tester_zayavok
+GET {{baseUrl}}/chats/groups/1/requests
+Authorization: Bearer {{token}}
+
+### 30. Ты (как админ) принимаешь заявку
+# Подставь ID юзера (из ответа шага 29) вместо {userId}
+PATCH {{baseUrl}}/chats/groups/1/approve/4
+Authorization: Bearer {{token}}

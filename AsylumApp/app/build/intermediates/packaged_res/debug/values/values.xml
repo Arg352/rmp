@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="asylum_red">#8B1A1A</color>
+    <color name="asylum_red_dark">#6B1414</color>
+    <color name="asylum_red_ripple">#228B1A1A</color>
+    <color name="background_white">#FFFFFF</color>
+    <color name="button_text">#FFFFFF</color>
+    <color name="error_red">#D32F2F</color>
+    <color name="input_background">#F2F2F2</color>
+    <color name="text_hint">#AAAAAA</color>
+    <color name="text_link">#8B1A1A</color>
+    <color name="text_primary">#333333</color>
+    <color name="text_secondary">#888888</color>
+    <dimen name="button_corner_radius">12dp</dimen>
+    <dimen name="button_margin_top">8dp</dimen>
+    <dimen name="input_corner_radius">12dp</dimen>
+    <dimen name="input_margin_bottom">16dp</dimen>
+    <dimen name="label_margin_bottom">6dp</dimen>
+    <dimen name="link_margin_top">16dp</dimen>
+    <dimen name="logo_margin_bottom">12dp</dimen>
+    <dimen name="logo_size">80dp</dimen>
+    <dimen name="screen_padding_horizontal">24dp</dimen>
+    <dimen name="screen_padding_top">32dp</dimen>
+    <dimen name="subtitle_margin_bottom">32dp</dimen>
+    <dimen name="title_margin_bottom">4dp</dimen>
+    <string name="app_name">Asylum</string>
+    <string name="btn_login">Войти</string>
+    <string name="btn_register">Зарегистрироваться</string>
+    <string name="error_empty_fields">Заполните все поля</string>
+    <string name="error_invalid_credentials">Неверный логин или пароль</string>
+    <string name="error_invalid_email">Введите корректный email</string>
+    <string name="error_network">Ошибка сети. Проверьте подключение</string>
+    <string name="error_password_short">Пароль должен быть не менее 6 символов</string>
+    <string name="error_passwords_not_match">Пароли не совпадают</string>
+    <string name="have_account">Уже есть аккаунт? Войти</string>
+    <string name="hint_confirm_password">••••••••</string>
+    <string name="hint_email">example@gmail.com</string>
+    <string name="hint_login">@username или email</string>
+    <string name="hint_password">••••••••</string>
+    <string name="hint_username">@username</string>
+    <string name="label_confirm_password">Подтвердите пароль</string>
+    <string name="label_email">Электронная почта</string>
+    <string name="label_login">Логин</string>
+    <string name="label_password">Пароль</string>
+    <string name="login_title">Войдите в аккаунт</string>
+    <string name="no_account">Нет аккаунта? Зарегистрироваться</string>
+    <string name="register_title">Войдите в аккаунт</string>
+    <string name="success_registered">Регистрация прошла успешно!</string>
+    <style name="AsylumAlertDialogTheme" parent="Theme.MaterialComponents.Light.Dialog.Alert">
+        <item name="colorPrimary">@color/asylum_red</item>
+        <item name="colorAccent">@color/asylum_red</item>
+        <item name="android:windowBackground">@drawable/bg_input_field</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.Asylum.Medium</item>
+    </style>
+    <style name="AsylumButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:textColor">@color/button_text</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="cornerRadius">10dp</item>
+        <item name="backgroundTint">@color/asylum_red</item>
+    </style>
+    <style name="AsylumEditText">
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:paddingTop">14dp</item>
+        <item name="android:paddingBottom">14dp</item>
+        <item name="android:background">@null</item>
+    </style>
+    <style name="AsylumInputLayout" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="boxBackgroundColor">@color/input_background</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeWidthFocused">0dp</item>
+        <item name="boxCornerRadiusTopStart">10dp</item>
+        <item name="boxCornerRadiusTopEnd">10dp</item>
+        <item name="boxCornerRadiusBottomStart">10dp</item>
+        <item name="boxCornerRadiusBottomEnd">10dp</item>
+        <item name="hintEnabled">false</item>
+        <item name="android:paddingBottom">0dp</item>
+        <item name="android:paddingTop">0dp</item>
+    </style>
+    <style name="AsylumLabel">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:layout_marginStart">2dp</item>
+    </style>
+    <style name="AsylumLink">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/asylum_red</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+    <style name="AsylumPopupMenu" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:popupBackground">@drawable/bg_input_field</item>
+    </style>
+    <style name="AsylumPopupTextAppearance" parent="TextAppearance.AppCompat.Menu">
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+    <style name="AsylumSubtitle">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">#888888</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+    <style name="AsylumTitle">
+        <item name="android:textSize">32sp</item>
+        <item name="android:textColor">#333333</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+    <style name="ShapeAppearance.Asylum.Medium" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerSize">12dp</item>
+    </style>
+    <style name="Theme.AsylumApp" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/asylum_red</item>
+        <item name="colorPrimaryDark">@color/asylum_red_dark</item>
+        <item name="colorAccent">@color/asylum_red</item>
+        <item name="android:windowBackground">@color/background_white</item>
+        <item name="android:statusBarColor">@color/background_white</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:navigationBarColor">@color/background_white</item>
+
+        
+        <item name="popupMenuStyle">@style/AsylumPopupMenu</item>
+        <item name="android:textAppearanceLargePopupMenu">@style/AsylumPopupTextAppearance</item>
+        <item name="android:textAppearanceSmallPopupMenu">@style/AsylumPopupTextAppearance</item>
+
+        
+        <item name="alertDialogTheme">@style/AsylumAlertDialogTheme</item>
+    </style>
+    <style name="Theme.AsylumApp.Splash" parent="Theme.AsylumApp">
+        <item name="android:windowBackground">@color/background_white</item>
+    </style>
+</resources>

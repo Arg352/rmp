@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Base application theme -->
+    <style name="Theme.AsylumApp" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/asylum_red</item>
+        <item name="colorPrimaryDark">@color/asylum_red_dark</item>
+        <item name="colorAccent">@color/asylum_red</item>
+        <item name="android:windowBackground">@color/background_white</item>
+        <item name="android:statusBarColor">@color/background_white</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:navigationBarColor">@color/background_white</item>
+
+        <!-- Popup Menu Style -->
+        <item name="popupMenuStyle">@style/AsylumPopupMenu</item>
+        <item name="android:textAppearanceLargePopupMenu">@style/AsylumPopupTextAppearance</item>
+        <item name="android:textAppearanceSmallPopupMenu">@style/AsylumPopupTextAppearance</item>
+
+        <!-- Dialog Style -->
+        <item name="alertDialogTheme">@style/AsylumAlertDialogTheme</item>
+    </style>
+
+    <style name="AsylumPopupMenu" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:popupBackground">@drawable/bg_input_field</item>
+    </style>
+
+    <style name="AsylumPopupTextAppearance" parent="TextAppearance.AppCompat.Menu">
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="AsylumAlertDialogTheme" parent="Theme.MaterialComponents.Light.Dialog.Alert">
+        <item name="colorPrimary">@color/asylum_red</item>
+        <item name="colorAccent">@color/asylum_red</item>
+        <item name="android:windowBackground">@drawable/bg_input_field</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.Asylum.Medium</item>
+    </style>
+
+    <style name="ShapeAppearance.Asylum.Medium" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerSize">12dp</item>
+    </style>
+
+    <!-- Splash Screen theme -->
+    <style name="Theme.AsylumApp.Splash" parent="Theme.AsylumApp">
+        <item name="android:windowBackground">@color/background_white</item>
+    </style>
+
+    <!-- Input field style -->
+    <style name="AsylumInputLayout" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="boxBackgroundColor">@color/input_background</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeWidthFocused">0dp</item>
+        <item name="boxCornerRadiusTopStart">10dp</item>
+        <item name="boxCornerRadiusTopEnd">10dp</item>
+        <item name="boxCornerRadiusBottomStart">10dp</item>
+        <item name="boxCornerRadiusBottomEnd">10dp</item>
+        <item name="hintEnabled">false</item>
+        <item name="android:paddingBottom">0dp</item>
+        <item name="android:paddingTop">0dp</item>
+    </style>
+
+    <!-- EditText inside InputLayout -->
+    <style name="AsylumEditText">
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:paddingTop">14dp</item>
+        <item name="android:paddingBottom">14dp</item>
+        <item name="android:background">@null</item>
+    </style>
+
+    <!-- Primary Button style -->
+    <style name="AsylumButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:textColor">@color/button_text</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="cornerRadius">10dp</item>
+        <item name="backgroundTint">@color/asylum_red</item>
+    </style>
+
+    <!-- Label text above inputs -->
+    <style name="AsylumLabel">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:layout_marginStart">2dp</item>
+    </style>
+
+    <!-- Link text -->
+    <style name="AsylumLink">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/asylum_red</item>
+        <item name="android:fontFamily" >sans-serif-medium</item>
+        <item name="android:clickable" >true</item>
+        <item name="android:focusable" >true</item>
+    </style>
+
+    <!-- App title "Asylum" -->
+    <style name="AsylumTitle">
+        <item name="android:textSize">32sp</item>
+        <item name="android:textColor">#333333</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <!-- Subtitle "Войдите в аккаунт" -->
+    <style name="AsylumSubtitle">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">#888888</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+</resources>

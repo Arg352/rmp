@@ -1,0 +1,160 @@
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  username     String   @unique
+  email        String   @unique
+  displayName String?
+  bio         String?
+  avatarUrl   String?
+  passwordHash String
+  lastActiveAt DateTime @default(now())
+  createdAt    DateTime @default(now())
+  notifyOnMessages Boolean @default(true)
+  notifyOnGroups   Boolean @default(false)
+  notifyOnFollows  Boolean @default(true)
+  notifyOnLikes    Boolean @default(false)
+
+  groupMemberships GroupMember[]
+  groupMessages    GroupMessage[]
+
+  posts        Post[]
+  likes        Like[]
+  
+  // Связи для мессенджера (отправитель/получатель)
+  sentMessages     Message[] @relation("SentMessages")
+  receivedMessages Message[] @relation("ReceivedMessages")
+  
+  // Упрощенная система друзей (подписок)
+  following    Friendship[] @relation("Following")
+  followers    Friendship[] @relation("Followers")
+
+  postAccesses PostAccess[]
+}
+
+model Post {
+  id        Int         @id @default(autoincrement())
+  title     String
+  tags      String?
+  text      String      @db.NVarChar(Max)
+  createdAt DateTime    @default(now())
+  isAnonymous  Boolean @default(false)
+  visibility   String  @default("PUBLIC") // "PUBLIC" или "SELECTED"
+  allowedUsers PostAccess[]
+  
+  userId    Int
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  images    PostImage[]
+  likes     Like[]
+}
+
+model PostImage {
+  id     Int    @id @default(autoincrement())
+  url    String // Ссылка из Cloudinary
+  postId Int
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+}
+
+model Like {
+  userId Int
+  postId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@id([userId, postId]) // Составной ключ защищает от накрутки
+}
+
+model Message {
+  id         Int      @id @default(autoincrement())
+  text       String   @db.NVarChar(Max)
+  createdAt  DateTime @default(now())
+  isRead     Boolean  @default(false)
+
+  senderId   Int
+  sender     User     @relation("SentMessages", fields: [senderId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  
+  receiverId Int
+  receiver   User     @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  attachments MessageAttachment[]
+}
+
+model Friendship {
+  id          Int  @id @default(autoincrement())
+  followerId  Int
+  followingId Int
+  
+  follower    User @relation("Following", fields: [followerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  following   User @relation("Followers", fields: [followingId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([followerId, followingId])
+}
+
+model Group {
+  id          Int            @id @default(autoincrement())
+  name        String
+  description String?
+  avatarUrl   String?
+  createdAt   DateTime       @default(now())
+  ownerId     Int
+  
+  members     GroupMember[]
+  messages    GroupMessage[]
+  tags       String?
+  visibility String   @default("OPEN") // ДОБАВИЛИ: "OPEN", "REQUEST", "PRIVATE"
+}
+
+model GroupMember {
+  userId   Int
+  groupId  Int
+  role     String   @default("MEMBER") // MEMBER или ADMIN
+  status   String   @default("APPROVED") // ДОБАВИЛИ: "APPROVED" или "PENDING"
+  joinedAt DateTime @default(now())
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  group    Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@id([userId, groupId])
+}
+
+model GroupMessage {
+  id        Int      @id @default(autoincrement())
+  text      String   @db.NVarChar(Max)
+  createdAt DateTime @default(now())
+  senderId  Int
+  groupId   Int
+
+  sender    User     @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  group     Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  attachments GroupMessageAttachment[]
+}
+
+model PostAccess {
+  userId Int
+  postId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@id([userId, postId])
+}
+
+model MessageAttachment {
+  id        Int     @id @default(autoincrement())
+  url       String  // Ссылка из Cloudinary
+  messageId Int
+  message   Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
+}
+
+model GroupMessageAttachment {
+  id             Int          @id @default(autoincrement())
+  url            String       // Ссылка из Cloudinary
+  groupMessageId Int
+  groupMessage   GroupMessage @relation(fields: [groupMessageId], references: [id], onDelete: Cascade)
+}

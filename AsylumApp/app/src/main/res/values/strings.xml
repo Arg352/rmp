@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Asylum</string>
+    <string name="login_title">Войдите в аккаунт</string>
+    <string name="register_title">Войдите в аккаунт</string>
+
+    <!-- Login screen -->
+    <string name="label_login">Логин</string>
+    <string name="hint_login">@username или email</string>
+    <string name="label_password">Пароль</string>
+    <string name="hint_password">••••••••</string>
+    <string name="btn_login">Войти</string>
+    <string name="no_account">Нет аккаунта? Зарегистрироваться</string>
+
+    <!-- Register screen -->
+    <string name="label_email">Электронная почта</string>
+    <string name="hint_email">example@gmail.com</string>
+    <string name="hint_username">@username</string>
+    <string name="label_confirm_password">Подтвердите пароль</string>
+    <string name="hint_confirm_password">••••••••</string>
+    <string name="btn_register">Зарегистрироваться</string>
+    <string name="have_account">Уже есть аккаунт? Войти</string>
+
+    <!-- Errors -->
+    <string name="error_empty_fields">Заполните все поля</string>
+    <string name="error_invalid_email">Введите корректный email</string>
+    <string name="error_password_short">Пароль должен быть не менее 6 символов</string>
+    <string name="error_passwords_not_match">Пароли не совпадают</string>
+    <string name="error_network">Ошибка сети. Проверьте подключение</string>
+    <string name="error_invalid_credentials">Неверный логин или пароль</string>
+
+    <!-- Success -->
+    <string name="success_registered">Регистрация прошла успешно!</string>
+</resources>

@@ -1,0 +1,4 @@
+rootProject.name = "Asylum"
+
+include ':app'
+project(':app').projectDir = new File('AsylumApp/app')

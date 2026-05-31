@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Тест Мессенджера Asylum</title>
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <style>
+        body {
+            font-family: Arial;
+            padding: 20px;
+            max-width: 600px;
+        }
+
+        input,
+        button {
+            padding: 10px;
+            margin: 5px 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        #chat-box {
+            border: 1px solid #ccc;
+            height: 300px;
+            overflow-y: scroll;
+            padding: 10px;
+            margin-top: 10px;
+            background: #f9f9f9;
+        }
+
+        .msg {
+            margin-bottom: 10px;
+            padding: 8px;
+            border-radius: 5px;
+            background: #e3f2fd;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Тест WebSockets</h2>
+
+    <div>
+        <input type="text" id="token" placeholder="Вставь сюда свой JWT токен (без слова Bearer)">
+        <button onclick="connect()">1. Подключиться к серверу</button>
+    </div>
+
+    <div id="message-panel" style="display: none; margin-top: 20px; border-top: 2px solid #ccc; padding-top: 20px;">
+        <input type="number" id="receiverId" placeholder="ID получателя (например, 2 для Айдара)">
+        <input type="text" id="text" placeholder="Текст сообщения">
+        <button onclick="sendMessage()">2. Отправить сообщение</button>
+    </div>
+
+    <div id="chat-box"></div>
+
+    <script>
+        let socket;
+
+        function log(text) {
+            const box = document.getElementById('chat-box');
+            box.innerHTML += `<div class="msg">${text}</div>`;
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function connect() {
+            const token = document.getElementById('token').value;
+            if (!token) return alert('Введите токен!');
+
+            // Подключаемся к нашему бэкенду
+            socket = io('http://localhost:3000', {
+                auth: { token: token }
+            });
+
+            socket.on('connect', () => {
+                log('✅ Успешно подключено к серверу!');
+                document.getElementById('message-panel').style.display = 'block';
+            });
+
+            // Слушаем входящие сообщения
+            socket.on('newMessage', (msg) => {
+                let attachmentsHtml = '';
+
+                // Если сервер прислал массив файлов и он не пустой, собираем картинки
+                if (msg.attachments && msg.attachments.length > 0) {
+                    attachmentsHtml = '<br><b>Вложения:</b><br>';
+                    msg.attachments.forEach(file => {
+                        // Рисуем маленькую картинку
+                        attachmentsHtml += `<img src="${file.url}" style="max-width: 150px; border-radius: 5px; margin-top: 5px; border: 1px solid #ccc;"><br>`;
+                    });
+                }
+
+                log(`<b>Новое сообщение:</b><br>От: Юзер ${msg.senderId}<br>Текст: ${msg.text}${attachmentsHtml}`);
+            });
+
+            socket.on('disconnect', () => {
+                log('❌ Отключено от сервера');
+            });
+        }
+
+        function sendMessage() {
+            const receiverId = document.getElementById('receiverId').value;
+            const text = document.getElementById('text').value;
+
+            if (!receiverId || !text) return alert('Заполни ID и текст!');
+
+            // Отправляем событие на сервер (наш @SubscribeMessage('sendMessage'))
+            socket.emit('sendMessage', {
+                receiverId: parseInt(receiverId),
+                text: text,
+                attachmentUrls: ["https://res.cloudinary.com/drvbghpni/image/upload/v1777853864/tech-store/iwjfwt9gyp2sirgbmqw4.jpg"]
+            });
+
+            document.getElementById('text').value = ''; // очищаем поле ввода
+        }
+    </script>
+</body>
+
+</html>

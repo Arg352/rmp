@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="100dp"
+    android:height="100dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+
+    <!-- Waves -->
+    <path
+        android:pathData="M20,70 Q35,60 50,70 T80,70"
+        android:strokeColor="#8B1A1A"
+        android:strokeWidth="3"
+        android:strokeLineCap="round" />
+    <path
+        android:pathData="M20,80 Q35,70 50,80 T80,80"
+        android:strokeColor="#8B1A1A"
+        android:strokeWidth="3"
+        android:strokeLineCap="round" />
+    <path
+        android:pathData="M20,90 Q35,80 50,90 T80,90"
+        android:strokeColor="#8B1A1A"
+        android:strokeWidth="3"
+        android:strokeLineCap="round" />
+
+    <!-- Tilted Bottle -->
+    <group
+        android:pivotX="50"
+        android:pivotY="45"
+        android:rotation="15">
+        <!-- Bottle Body -->
+        <path
+            android:pathData="M40,25 L60,25 L63,35 L63,60 Q63,65 58,65 L42,65 Q37,65 37,60 L37,35 Z"
+            android:strokeColor="#8B1A1A"
+            android:strokeWidth="2.5"
+            android:strokeLineJoin="round" />
+        <!-- Bottle Neck -->
+        <path
+            android:pathData="M45,25 L45,15 L55,15 L55,25"
+            android:strokeColor="#8B1A1A"
+            android:strokeWidth="2.5"
+            android:strokeLineJoin="round" />
+        <!-- Cork/Cap -->
+        <path
+            android:pathData="M44,15 L56,15 L56,10 L44,10 Z"
+            android:fillColor="#8B1A1A" />
+    </group>
+</vector>

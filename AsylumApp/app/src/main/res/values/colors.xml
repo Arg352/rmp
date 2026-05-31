@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Asylum Brand Colors -->
+    <color name="asylum_red">#8B1A1A</color>
+    <color name="asylum_red_dark">#6B1414</color>
+    <color name="asylum_red_ripple">#228B1A1A</color>
+
+    <!-- Background -->
+    <color name="background_white">#FFFFFF</color>
+
+    <!-- Text Colors -->
+    <color name="text_primary">#333333</color>
+    <color name="text_secondary">#888888</color>
+    <color name="text_hint">#AAAAAA</color>
+    <color name="text_link">#8B1A1A</color>
+
+    <!-- Input Fields -->
+    <color name="input_background">#F2F2F2</color>
+
+    <!-- Button -->
+    <color name="button_text">#FFFFFF</color>
+
+    <!-- Error -->
+    <color name="error_red">#D32F2F</color>
+</resources>
