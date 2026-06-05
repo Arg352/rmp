@@ -2,6 +2,7 @@ package com.asylum.app.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,7 +28,7 @@ public class CreatePostRequest {
     private List<String> images;
 
     @SerializedName("allowedUserIds")
-    private List<Integer> allowedUserIds;
+    private List<Integer> allowedUserIds = new ArrayList<>();
 
     public CreatePostRequest(String title, String text, String tags,
                               boolean isAnonymous, String visibility,
@@ -46,4 +47,9 @@ public class CreatePostRequest {
     public boolean isAnonymous() { return isAnonymous; }
     public String getVisibility() { return visibility; }
     public List<String> getImages() { return images; }
+    public List<Integer> getAllowedUserIds() { return allowedUserIds; }
+    
+    public void setAllowedUserIds(List<Integer> allowedUserIds) {
+        this.allowedUserIds = allowedUserIds;
+    }
 }

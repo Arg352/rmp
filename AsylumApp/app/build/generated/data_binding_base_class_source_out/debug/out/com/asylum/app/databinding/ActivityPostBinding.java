@@ -32,6 +32,9 @@ public final class ActivityPostBinding implements ViewBinding {
   public final ImageView btnBack;
 
   @NonNull
+  public final ImageView btnDeletePost;
+
+  @NonNull
   public final ImageView btnDownload1;
 
   @NonNull
@@ -90,17 +93,19 @@ public final class ActivityPostBinding implements ViewBinding {
 
   private ActivityPostBinding(@NonNull ConstraintLayout rootView,
       @NonNull BottomNavigationView bottomNavigation, @NonNull ImageView btnBack,
-      @NonNull ImageView btnDownload1, @NonNull ImageView btnDownload2, @NonNull ImageView btnShare,
-      @NonNull CardView cardImage1, @NonNull CardView cardImage2, @NonNull ChipGroup cgTags,
-      @NonNull View divider, @NonNull FloatingActionButton fabUpvote,
-      @NonNull ImageView ivPostImage1, @NonNull ImageView ivPostImage2,
-      @NonNull LinearLayout toolbar, @NonNull TextView tvAuthorHandle,
-      @NonNull TextView tvAuthorLetter, @NonNull TextView tvAuthorName,
-      @NonNull TextView tvLikesCount, @NonNull TextView tvPostContent, @NonNull TextView tvPostDate,
-      @NonNull TextView tvPostTitle, @NonNull TextView tvToolbarTitle) {
+      @NonNull ImageView btnDeletePost, @NonNull ImageView btnDownload1,
+      @NonNull ImageView btnDownload2, @NonNull ImageView btnShare, @NonNull CardView cardImage1,
+      @NonNull CardView cardImage2, @NonNull ChipGroup cgTags, @NonNull View divider,
+      @NonNull FloatingActionButton fabUpvote, @NonNull ImageView ivPostImage1,
+      @NonNull ImageView ivPostImage2, @NonNull LinearLayout toolbar,
+      @NonNull TextView tvAuthorHandle, @NonNull TextView tvAuthorLetter,
+      @NonNull TextView tvAuthorName, @NonNull TextView tvLikesCount,
+      @NonNull TextView tvPostContent, @NonNull TextView tvPostDate, @NonNull TextView tvPostTitle,
+      @NonNull TextView tvToolbarTitle) {
     this.rootView = rootView;
     this.bottomNavigation = bottomNavigation;
     this.btnBack = btnBack;
+    this.btnDeletePost = btnDeletePost;
     this.btnDownload1 = btnDownload1;
     this.btnDownload2 = btnDownload2;
     this.btnShare = btnShare;
@@ -158,6 +163,12 @@ public final class ActivityPostBinding implements ViewBinding {
       id = R.id.btnBack;
       ImageView btnBack = ViewBindings.findChildViewById(rootView, id);
       if (btnBack == null) {
+        break missingId;
+      }
+
+      id = R.id.btnDeletePost;
+      ImageView btnDeletePost = ViewBindings.findChildViewById(rootView, id);
+      if (btnDeletePost == null) {
         break missingId;
       }
 
@@ -276,9 +287,9 @@ public final class ActivityPostBinding implements ViewBinding {
       }
 
       return new ActivityPostBinding((ConstraintLayout) rootView, bottomNavigation, btnBack,
-          btnDownload1, btnDownload2, btnShare, cardImage1, cardImage2, cgTags, divider, fabUpvote,
-          ivPostImage1, ivPostImage2, toolbar, tvAuthorHandle, tvAuthorLetter, tvAuthorName,
-          tvLikesCount, tvPostContent, tvPostDate, tvPostTitle, tvToolbarTitle);
+          btnDeletePost, btnDownload1, btnDownload2, btnShare, cardImage1, cardImage2, cgTags,
+          divider, fabUpvote, ivPostImage1, ivPostImage2, toolbar, tvAuthorHandle, tvAuthorLetter,
+          tvAuthorName, tvLikesCount, tvPostContent, tvPostDate, tvPostTitle, tvToolbarTitle);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

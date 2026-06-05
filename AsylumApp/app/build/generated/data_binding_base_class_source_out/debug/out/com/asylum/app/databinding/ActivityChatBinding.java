@@ -24,6 +24,12 @@ public final class ActivityChatBinding implements ViewBinding {
   private final ConstraintLayout rootView;
 
   @NonNull
+  public final LinearLayout attachmentPreviewArea;
+
+  @NonNull
+  public final LinearLayout attachmentsContainer;
+
+  @NonNull
   public final ImageView btnAttach;
 
   @NonNull
@@ -65,13 +71,16 @@ public final class ActivityChatBinding implements ViewBinding {
   @NonNull
   public final TextView tvUserHandle;
 
-  private ActivityChatBinding(@NonNull ConstraintLayout rootView, @NonNull ImageView btnAttach,
-      @NonNull ImageView btnBack, @NonNull ImageView btnMute, @NonNull ImageView btnSend,
-      @NonNull LinearLayout chatHeader, @NonNull EditText etMessage, @NonNull View headerDivider,
-      @NonNull View inputDivider, @NonNull LinearLayout inputLayout,
+  private ActivityChatBinding(@NonNull ConstraintLayout rootView,
+      @NonNull LinearLayout attachmentPreviewArea, @NonNull LinearLayout attachmentsContainer,
+      @NonNull ImageView btnAttach, @NonNull ImageView btnBack, @NonNull ImageView btnMute,
+      @NonNull ImageView btnSend, @NonNull LinearLayout chatHeader, @NonNull EditText etMessage,
+      @NonNull View headerDivider, @NonNull View inputDivider, @NonNull LinearLayout inputLayout,
       @NonNull RecyclerView rvMessages, @NonNull TextView tvAvatarLetter,
       @NonNull TextView tvChatTitle, @NonNull TextView tvStatus, @NonNull TextView tvUserHandle) {
     this.rootView = rootView;
+    this.attachmentPreviewArea = attachmentPreviewArea;
+    this.attachmentsContainer = attachmentsContainer;
     this.btnAttach = btnAttach;
     this.btnBack = btnBack;
     this.btnMute = btnMute;
@@ -115,6 +124,18 @@ public final class ActivityChatBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
+      id = R.id.attachmentPreviewArea;
+      LinearLayout attachmentPreviewArea = ViewBindings.findChildViewById(rootView, id);
+      if (attachmentPreviewArea == null) {
+        break missingId;
+      }
+
+      id = R.id.attachmentsContainer;
+      LinearLayout attachmentsContainer = ViewBindings.findChildViewById(rootView, id);
+      if (attachmentsContainer == null) {
+        break missingId;
+      }
+
       id = R.id.btnAttach;
       ImageView btnAttach = ViewBindings.findChildViewById(rootView, id);
       if (btnAttach == null) {
@@ -199,9 +220,10 @@ public final class ActivityChatBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ActivityChatBinding((ConstraintLayout) rootView, btnAttach, btnBack, btnMute,
-          btnSend, chatHeader, etMessage, headerDivider, inputDivider, inputLayout, rvMessages,
-          tvAvatarLetter, tvChatTitle, tvStatus, tvUserHandle);
+      return new ActivityChatBinding((ConstraintLayout) rootView, attachmentPreviewArea,
+          attachmentsContainer, btnAttach, btnBack, btnMute, btnSend, chatHeader, etMessage,
+          headerDivider, inputDivider, inputLayout, rvMessages, tvAvatarLetter, tvChatTitle,
+          tvStatus, tvUserHandle);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

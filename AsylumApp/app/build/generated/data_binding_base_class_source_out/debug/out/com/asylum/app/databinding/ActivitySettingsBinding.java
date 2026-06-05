@@ -15,6 +15,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.asylum.app.R;
+import de.hdodenhof.circleimageview.CircleImageView;
 import java.lang.NullPointerException;
 import java.lang.Override;
 import java.lang.String;
@@ -27,10 +28,16 @@ public final class ActivitySettingsBinding implements ViewBinding {
   public final ImageView btnBack;
 
   @NonNull
+  public final TextView btnChangeAvatar;
+
+  @NonNull
   public final LinearLayout header;
 
   @NonNull
   public final View headerDivider;
+
+  @NonNull
+  public final CircleImageView ivAvatar;
 
   @NonNull
   public final RelativeLayout rlDisplayName;
@@ -40,6 +47,9 @@ public final class ActivitySettingsBinding implements ViewBinding {
 
   @NonNull
   public final RelativeLayout rlPassword;
+
+  @NonNull
+  public final SwitchCompat switchDarkMode;
 
   @NonNull
   public final SwitchCompat switchFollows;
@@ -63,19 +73,23 @@ public final class ActivitySettingsBinding implements ViewBinding {
   public final TextView tvLoginValue;
 
   private ActivitySettingsBinding(@NonNull ConstraintLayout rootView, @NonNull ImageView btnBack,
-      @NonNull LinearLayout header, @NonNull View headerDivider,
-      @NonNull RelativeLayout rlDisplayName, @NonNull RelativeLayout rlEmail,
-      @NonNull RelativeLayout rlPassword, @NonNull SwitchCompat switchFollows,
+      @NonNull TextView btnChangeAvatar, @NonNull LinearLayout header, @NonNull View headerDivider,
+      @NonNull CircleImageView ivAvatar, @NonNull RelativeLayout rlDisplayName,
+      @NonNull RelativeLayout rlEmail, @NonNull RelativeLayout rlPassword,
+      @NonNull SwitchCompat switchDarkMode, @NonNull SwitchCompat switchFollows,
       @NonNull SwitchCompat switchGroups, @NonNull SwitchCompat switchLikes,
       @NonNull SwitchCompat switchMessages, @NonNull TextView tvDisplayNameValue,
       @NonNull TextView tvEmailValue, @NonNull TextView tvLoginValue) {
     this.rootView = rootView;
     this.btnBack = btnBack;
+    this.btnChangeAvatar = btnChangeAvatar;
     this.header = header;
     this.headerDivider = headerDivider;
+    this.ivAvatar = ivAvatar;
     this.rlDisplayName = rlDisplayName;
     this.rlEmail = rlEmail;
     this.rlPassword = rlPassword;
+    this.switchDarkMode = switchDarkMode;
     this.switchFollows = switchFollows;
     this.switchGroups = switchGroups;
     this.switchLikes = switchLikes;
@@ -118,6 +132,12 @@ public final class ActivitySettingsBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.btnChangeAvatar;
+      TextView btnChangeAvatar = ViewBindings.findChildViewById(rootView, id);
+      if (btnChangeAvatar == null) {
+        break missingId;
+      }
+
       id = R.id.header;
       LinearLayout header = ViewBindings.findChildViewById(rootView, id);
       if (header == null) {
@@ -127,6 +147,12 @@ public final class ActivitySettingsBinding implements ViewBinding {
       id = R.id.headerDivider;
       View headerDivider = ViewBindings.findChildViewById(rootView, id);
       if (headerDivider == null) {
+        break missingId;
+      }
+
+      id = R.id.ivAvatar;
+      CircleImageView ivAvatar = ViewBindings.findChildViewById(rootView, id);
+      if (ivAvatar == null) {
         break missingId;
       }
 
@@ -145,6 +171,12 @@ public final class ActivitySettingsBinding implements ViewBinding {
       id = R.id.rlPassword;
       RelativeLayout rlPassword = ViewBindings.findChildViewById(rootView, id);
       if (rlPassword == null) {
+        break missingId;
+      }
+
+      id = R.id.switchDarkMode;
+      SwitchCompat switchDarkMode = ViewBindings.findChildViewById(rootView, id);
+      if (switchDarkMode == null) {
         break missingId;
       }
 
@@ -190,9 +222,10 @@ public final class ActivitySettingsBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ActivitySettingsBinding((ConstraintLayout) rootView, btnBack, header,
-          headerDivider, rlDisplayName, rlEmail, rlPassword, switchFollows, switchGroups,
-          switchLikes, switchMessages, tvDisplayNameValue, tvEmailValue, tvLoginValue);
+      return new ActivitySettingsBinding((ConstraintLayout) rootView, btnBack, btnChangeAvatar,
+          header, headerDivider, ivAvatar, rlDisplayName, rlEmail, rlPassword, switchDarkMode,
+          switchFollows, switchGroups, switchLikes, switchMessages, tvDisplayNameValue,
+          tvEmailValue, tvLoginValue);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

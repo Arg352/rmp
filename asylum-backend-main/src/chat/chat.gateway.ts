@@ -61,7 +61,8 @@ export class ChatGateway implements OnGatewayConnection {
     payload: {
       receiverId: number;
       text: string;
-      attachmentUrls?: string[];
+      imageUrls?: string[];       // поле от Android-клиента
+      attachmentUrls?: string[];  // поле для совместимости
     },
   ) {
     const clientData = client.data as unknown as Record<string, any>;
@@ -70,12 +71,15 @@ export class ChatGateway implements OnGatewayConnection {
       return;
     }
 
+    // Android отправляет imageUrls, принимаем оба варианта
+    const attachmentUrls = payload.imageUrls ?? payload.attachmentUrls;
+
     const receiverId = Number(payload.receiverId);
     const savedMessage = await this.chatService.saveMessage(
       senderId,
       receiverId,
       payload.text,
-      payload.attachmentUrls,
+      attachmentUrls,
     );
 
     this.server.to(`user_${receiverId}`).emit('newMessage', savedMessage);

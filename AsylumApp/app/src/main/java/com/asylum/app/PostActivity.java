@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.asylum.app.api.ApiService;
@@ -32,7 +33,6 @@ public class PostActivity extends AppCompatActivity {
 
     public static Post currentPost;
 
-    private boolean isLiked = false;
     private SessionManager sessionManager;
     private ApiService apiService;
 
@@ -70,7 +70,58 @@ public class PostActivity extends AppCompatActivity {
 
         if (currentPost != null) {
             displayPost(currentPost);
+            setupDeleteButton(currentPost);
         }
+    }
+
+    private void setupDeleteButton(Post post) {
+        ImageView btnDelete = findViewById(R.id.btnDeletePost);
+        if (btnDelete == null) return;
+
+        int myUserId = sessionManager.getUserId();
+        // Показываем кнопку удаления только автору поста
+        if (post.getUser() != null && post.getUser().getId() == myUserId) {
+            btnDelete.setVisibility(View.VISIBLE);
+            btnDelete.setOnClickListener(v -> confirmDelete(post));
+        } else {
+            btnDelete.setVisibility(View.GONE);
+        }
+    }
+
+    private void confirmDelete(Post post) {
+        new AlertDialog.Builder(this)
+                .setTitle("Удалить запись?")
+                .setMessage("Это действие нельзя отменить.")
+                .setPositiveButton("Удалить", (d, w) -> deletePost(post))
+                .setNegativeButton("Отмена", null)
+                .show();
+    }
+
+    private void deletePost(Post post) {
+        String token = sessionManager.getBearerToken();
+        if (token == null) return;
+
+        apiService.deletePost(token, post.getId()).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful() || response.code() == 204) {
+                    Toast.makeText(PostActivity.this, "Запись удалена", Toast.LENGTH_SHORT).show();
+                    // Возвращаемся и сигнализируем ленте обновить список
+                    Intent result = new Intent();
+                    result.putExtra("POST_DELETED", true);
+                    result.putExtra("POST_ID", post.getId());
+                    setResult(RESULT_OK, result);
+                    finish();
+                } else {
+                    Toast.makeText(PostActivity.this, "Ошибка удаления: " + response.code(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(PostActivity.this, "Ошибка сети", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void displayPost(Post post) {
@@ -103,26 +154,34 @@ public class PostActivity extends AppCompatActivity {
         ChipGroup cgTags = findViewById(R.id.cgTags);
         if (cgTags != null) {
             cgTags.removeAllViews();
-            String tags = post.getTags();
-            if (tags != null && !tags.isEmpty()) {
-                for (String tag : tags.split("[,\\s]+")) {
+            String tagsString = post.getTags();
+            if (tagsString != null && !tagsString.isEmpty()) {
+                for (String tag : tagsString.split("[,\\s]+")) {
                     if (!tag.isEmpty()) {
+                        String cleanTag = tag.startsWith("#") ? tag.substring(1) : tag;
                         Chip chip = new Chip(this);
-                        chip.setText(tag.startsWith("#") ? tag : "#" + tag);
-                        chip.setChipBackgroundColorResource(R.color.asylum_red_ripple);
-                        chip.setChipStrokeWidth(0);
-                        chip.setTextSize(10);
-                        chip.setClickable(false);
+                        chip.setText("#" + cleanTag);
+                        chip.setChipBackgroundColorResource(android.R.color.transparent);
+                        chip.setChipStrokeColorResource(R.color.asylum_red);
+                        chip.setChipStrokeWidth(2f);
+                        chip.setTextColor(getResources().getColor(R.color.asylum_red));
+                        chip.setTextSize(12);
+                        chip.setClickable(true);
+                        chip.setOnClickListener(v -> {
+                            Intent intent = new Intent(this, MainActivity.class);
+                            intent.putExtra("FILTER_TAG", cleanTag);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                            startActivity(intent);
+                        });
                         cgTags.addView(chip);
                     }
                 }
             }
         }
 
-        isLiked = post.isLiked();
         FloatingActionButton fabUpvote = findViewById(R.id.fabUpvote);
         if (fabUpvote != null) {
-            updateLikeButton(fabUpvote, isLiked);
+            updateLikeButton(fabUpvote, post.isLiked());
             fabUpvote.setOnClickListener(v -> toggleLike(post, fabUpvote, tvLikesCount));
         }
 
@@ -136,8 +195,10 @@ public class PostActivity extends AppCompatActivity {
 
     private void sendPostToChat(int userId) {
         if (currentPost == null) return;
-        String shareText = "Посмотри этот пост: " + currentPost.getTitle() + "\n\n" + currentPost.getText() + "\n\n Ссылка: asylum://post/" + currentPost.getId();
-        
+        String shareText = "Посмотри этот пост: " + currentPost.getTitle()
+                + "\n\n" + currentPost.getText()
+                + "\n\nСсылка: asylum://post/" + currentPost.getId();
+
         Intent intent = new Intent(this, ChatActivity.class);
         intent.putExtra("CHAT_USER_ID", userId);
         intent.putExtra("PREFILL_MESSAGE", shareText);
@@ -149,22 +210,27 @@ public class PostActivity extends AppCompatActivity {
         String token = sessionManager.getBearerToken();
         if (token == null) return;
 
-        isLiked = !isLiked;
-        updateLikeButton(fab, isLiked);
-        if (tvCount != null) {
-            int count = post.getLikesCount() + (isLiked ? 1 : -1);
-            tvCount.setText(String.valueOf(count));
-        }
+        post.toggleLike();
+        updateLikeButton(fab, post.isLiked());
+        if (tvCount != null) tvCount.setText(String.valueOf(post.getLikesCount()));
 
         apiService.toggleLike(token, post.getId()).enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {}
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (!response.isSuccessful()) rollbackLike(post, fab, tvCount);
+            }
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                isLiked = !isLiked;
-                updateLikeButton(fab, isLiked);
+                rollbackLike(post, fab, tvCount);
             }
         });
+    }
+
+    private void rollbackLike(Post post, FloatingActionButton fab, TextView tvCount) {
+        post.toggleLike();
+        updateLikeButton(fab, post.isLiked());
+        if (tvCount != null) tvCount.setText(String.valueOf(post.getLikesCount()));
+        Toast.makeText(this, "Ошибка сети", Toast.LENGTH_SHORT).show();
     }
 
     private void updateLikeButton(FloatingActionButton fab, boolean liked) {

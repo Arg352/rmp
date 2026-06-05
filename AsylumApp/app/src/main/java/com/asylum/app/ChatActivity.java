@@ -2,9 +2,12 @@ package com.asylum.app;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,10 +24,14 @@ import com.asylum.app.api.RetrofitClient;
 import com.asylum.app.api.SocketManager;
 import com.asylum.app.models.Message;
 import com.asylum.app.utils.SessionManager;
+import com.bumptech.glide.Glide;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,13 +60,14 @@ public class ChatActivity extends AppCompatActivity {
     private boolean isMuted = false;
 
     private final List<Uri> selectedImageUris = new ArrayList<>();
+    private LinearLayout attachmentsContainer;
+    private View attachmentPreviewArea;
 
     private final ActivityResultLauncher<String> imagePickerLauncher = registerForActivityResult(
             new ActivityResultContracts.GetContent(),
             uri -> {
-                if (uri != null) {
-                    selectedImageUris.add(uri);
-                    Toast.makeText(this, "Изображение прикреплено (" + selectedImageUris.size() + ")", Toast.LENGTH_SHORT).show();
+                if (uri != null && selectedImageUris.size() < 5) {
+                    addAttachment(uri);
                 }
             }
     );
@@ -87,21 +95,9 @@ public class ChatActivity extends AppCompatActivity {
         TextView tvAvatarLetter = findViewById(R.id.tvAvatarLetter);
         ImageView btnMute = findViewById(R.id.btnMute);
 
-        String chatUsername = getIntent().getStringExtra("CHAT_USERNAME");
-
         if (chatName != null) {
             tvChatTitle.setText(chatName);
             tvAvatarLetter.setText(chatName.substring(0, 1).toUpperCase());
-        }
-
-        TextView tvUserHandle = findViewById(R.id.tvUserHandle);
-        if (tvUserHandle != null && chatUsername != null) {
-            tvUserHandle.setText(chatUsername);
-        }
-
-        TextView tvStatus = findViewById(R.id.tvStatus);
-        if (tvStatus != null) {
-            tvStatus.setText("в сети");
         }
 
         updateMuteUI(btnMute);
@@ -123,18 +119,132 @@ public class ChatActivity extends AppCompatActivity {
             etMessage.setText(prefillMessage);
         }
 
-        ImageView btnSend = findViewById(R.id.btnSend);
-        if (btnSend != null) {
-            btnSend.setOnClickListener(v -> sendMessage());
-        }
+        attachmentPreviewArea = findViewById(R.id.attachmentPreviewArea);
+        attachmentsContainer = findViewById(R.id.attachmentsContainer);
 
-        ImageView btnAttachView = findViewById(R.id.btnAttach);
-        if (btnAttachView != null) {
-            btnAttachView.setOnClickListener(v -> imagePickerLauncher.launch("image/*"));
-        }
+        findViewById(R.id.btnSend).setOnClickListener(v -> sendMessage());
+        findViewById(R.id.btnAttach).setOnClickListener(v -> imagePickerLauncher.launch("image/*"));
 
         loadChatHistory();
         setupWebSocket();
+    }
+
+    private void addAttachment(Uri uri) {
+        selectedImageUris.add(uri);
+        if (attachmentPreviewArea != null) {
+            attachmentPreviewArea.setVisibility(View.VISIBLE);
+        }
+
+        View itemView = LayoutInflater.from(this).inflate(R.layout.item_attachment_preview, attachmentsContainer, false);
+        ImageView ivPreview = itemView.findViewById(R.id.ivPreview);
+        ImageView btnRemove = itemView.findViewById(R.id.btnRemove);
+
+        int size = (int) (60 * getResources().getDisplayMetrics().density);
+        itemView.getLayoutParams().width = size;
+        itemView.getLayoutParams().height = size;
+
+        Glide.with(this).load(uri).into(ivPreview);
+
+        btnRemove.setOnClickListener(v -> {
+            selectedImageUris.remove(uri);
+            attachmentsContainer.removeView(itemView);
+            if (selectedImageUris.isEmpty() && attachmentPreviewArea != null) {
+                attachmentPreviewArea.setVisibility(View.GONE);
+            }
+        });
+
+        attachmentsContainer.addView(itemView);
+    }
+
+    private void sendMessage() {
+        String text = etMessage.getText().toString().trim();
+        if (text.isEmpty() && selectedImageUris.isEmpty()) return;
+
+        if (selectedImageUris.isEmpty()) {
+            sendViaWebSocket(text, null);
+        } else {
+            uploadImagesAndSend(text);
+        }
+    }
+
+    private void uploadImagesAndSend(String text) {
+        String token = sessionManager.getBearerToken();
+        if (token == null) return;
+
+        List<MultipartBody.Part> parts = new ArrayList<>();
+        for (Uri uri : selectedImageUris) {
+            try (InputStream inputStream = getContentResolver().openInputStream(uri)) {
+                if (inputStream == null) continue;
+                byte[] bytes = getBytes(inputStream);
+                
+                String mimeType = getContentResolver().getType(uri);
+                if (mimeType == null) mimeType = "image/jpeg";
+
+                // В OkHttp 4.x Java порядок: create(bytes, MediaType)
+                RequestBody requestBody = RequestBody.create(bytes, MediaType.parse(mimeType));
+                MultipartBody.Part part = MultipartBody.Part.createFormData("images",
+                        "chat_" + System.currentTimeMillis() + ".jpg", requestBody);
+                parts.add(part);
+            } catch (IOException e) {
+                Toast.makeText(this, "Ошибка чтения изображения", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        apiService.uploadImages(token, parts).enqueue(new Callback<MediaUploadResponse>() {
+            @Override
+            public void onResponse(Call<MediaUploadResponse> call, Response<MediaUploadResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<String> urls = response.body().getUrls();
+                    sendViaWebSocket(text, urls);
+                    clearAttachments();
+                } else {
+                    Toast.makeText(ChatActivity.this, "Ошибка загрузки (500): проверьте сервер", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MediaUploadResponse> call, Throwable t) {
+                Toast.makeText(ChatActivity.this, "Ошибка сети", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private byte[] getBytes(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int len;
+        while ((len = inputStream.read(buffer)) != -1) {
+            byteBuffer.write(buffer, 0, len);
+        }
+        return byteBuffer.toByteArray();
+    }
+
+    private void clearAttachments() {
+        selectedImageUris.clear();
+        attachmentsContainer.removeAllViews();
+        if (attachmentPreviewArea != null) {
+            attachmentPreviewArea.setVisibility(View.GONE);
+        }
+    }
+
+    private void sendViaWebSocket(String text, List<String> imageUrls) {
+        if (otherUserId == -1) return;
+
+        Message optimisticMsg = new Message(myUserId, text);
+        if (imageUrls != null) {
+            List<com.asylum.app.models.ImageAttachment> attachments = new ArrayList<>();
+            for (String url : imageUrls) {
+                attachments.add(new com.asylum.app.models.ImageAttachment(url));
+            }
+            optimisticMsg.setAttachments(attachments);
+        }
+        adapter.addMessage(optimisticMsg);
+        scrollToBottom();
+        etMessage.setText("");
+
+        if (socketManager.isConnected()) {
+            socketManager.sendMessage(otherUserId, text, imageUrls);
+        }
     }
 
     private void updateMuteUI(ImageView btnMute) {
@@ -161,9 +271,7 @@ public class ChatActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Message>> call, Throwable t) {
-                Toast.makeText(ChatActivity.this, "Не удалось загрузить историю", Toast.LENGTH_SHORT).show();
-            }
+            public void onFailure(Call<List<Message>> call, Throwable t) {}
         });
     }
 
@@ -175,95 +283,21 @@ public class ChatActivity extends AppCompatActivity {
         socketManager.onNewMessage(messageJson -> runOnUiThread(() -> {
             try {
                 int senderId = messageJson.getInt("senderId");
-                int receiverId = messageJson.getInt("receiverId");
-
-                if (senderId == myUserId) return;
-
-                boolean isThisChat = (senderId == otherUserId && receiverId == myUserId);
-
-                if (isThisChat) {
+                if (senderId == otherUserId) {
                     Message msg = new Message(senderId, messageJson.getString("text"));
+                    if (messageJson.has("imageUrls")) {
+                        JSONArray urlsArr = messageJson.getJSONArray("imageUrls");
+                        List<com.asylum.app.models.ImageAttachment> attachments = new ArrayList<>();
+                        for (int i = 0; i < urlsArr.length(); i++) {
+                            attachments.add(new com.asylum.app.models.ImageAttachment(urlsArr.getString(i)));
+                        }
+                        msg.setAttachments(attachments);
+                    }
                     adapter.addMessage(msg);
                     scrollToBottom();
                 }
-            } catch (JSONException e) {
-            }
+            } catch (JSONException ignored) {}
         }));
-    }
-
-    private void sendMessage() {
-        String text = etMessage.getText().toString().trim();
-        if (text.isEmpty() && selectedImageUris.isEmpty()) return;
-
-        if (selectedImageUris.isEmpty()) {
-            sendViaWebSocket(text, null);
-        } else {
-            uploadImagesAndSend(text);
-        }
-    }
-
-    private void uploadImagesAndSend(String text) {
-        String token = sessionManager.getBearerToken();
-        if (token == null) return;
-
-        List<MultipartBody.Part> parts = new ArrayList<>();
-        for (Uri uri : selectedImageUris) {
-            try {
-                InputStream inputStream = getContentResolver().openInputStream(uri);
-                if (inputStream == null) continue;
-                byte[] bytes = inputStream.readAllBytes();
-                inputStream.close();
-
-                RequestBody requestBody = RequestBody.create(bytes, MediaType.parse("image/*"));
-                MultipartBody.Part part = MultipartBody.Part.createFormData("images",
-                        "image_" + System.currentTimeMillis() + ".jpg", requestBody);
-                parts.add(part);
-            } catch (Exception e) {
-                Toast.makeText(this, "Ошибка чтения изображения", Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        if (parts.isEmpty()) {
-            sendViaWebSocket(text, null);
-            return;
-        }
-
-        apiService.uploadImages(token, parts).enqueue(new Callback<MediaUploadResponse>() {
-            @Override
-            public void onResponse(Call<MediaUploadResponse> call, Response<MediaUploadResponse> response) {
-                List<String> urls = null;
-                if (response.isSuccessful() && response.body() != null) {
-                    urls = response.body().getUrls();
-                }
-                sendViaWebSocket(text, urls);
-                selectedImageUris.clear();
-            }
-
-            @Override
-            public void onFailure(Call<MediaUploadResponse> call, Throwable t) {
-                Toast.makeText(ChatActivity.this, "Ошибка загрузки изображений", Toast.LENGTH_SHORT).show();
-                sendViaWebSocket(text, null);
-                selectedImageUris.clear();
-            }
-        });
-    }
-
-    private void sendViaWebSocket(String text, List<String> imageUrls) {
-        if (otherUserId == -1) {
-            Toast.makeText(this, "Нет ID собеседника", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        Message optimisticMsg = new Message(myUserId, text);
-        adapter.addMessage(optimisticMsg);
-        scrollToBottom();
-        etMessage.setText("");
-
-        if (socketManager.isConnected()) {
-            socketManager.sendMessage(otherUserId, text);
-        } else {
-            Toast.makeText(this, "WebSocket не подключён", Toast.LENGTH_SHORT).show();
-        }
     }
 
     private void scrollToBottom() {

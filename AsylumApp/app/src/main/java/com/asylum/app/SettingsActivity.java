@@ -1,8 +1,8 @@
 package com.asylum.app;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -10,32 +10,52 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.SwitchCompat;
 
 import com.asylum.app.api.ApiService;
+import com.asylum.app.api.MediaUploadResponse;
 import com.asylum.app.api.RetrofitClient;
 import com.asylum.app.models.UpdateSettingsRequest;
 import com.asylum.app.models.UserProfile;
 import com.asylum.app.utils.SessionManager;
+import com.bumptech.glide.Glide;
 
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * SettingsActivity — загружает настройки профиля из GET /users/me
- * и сохраняет через PATCH /users/settings.
- */
 public class SettingsActivity extends AppCompatActivity {
 
     private TextView tvLoginValue, tvEmailValue, tvDisplayNameValue;
     private View rlDisplayName, rlEmail, rlPassword;
-    private SwitchCompat switchMessages, switchGroups, switchFollows, switchLikes;
+    private CircleImageView ivAvatar;
+    private TextView btnChangeAvatar;
+    private SwitchCompat switchMessages, switchGroups, switchFollows, switchLikes, switchDarkMode;
     private SessionManager sessionManager;
     private ApiService apiService;
     private UserProfile currentProfile;
+
+    private final ActivityResultLauncher<String> imagePickerLauncher = registerForActivityResult(
+            new ActivityResultContracts.GetContent(),
+            uri -> {
+                if (uri != null) {
+                    uploadAvatar(uri);
+                }
+            }
+    );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +68,8 @@ public class SettingsActivity extends AppCompatActivity {
         ImageView btnBack = findViewById(R.id.btnBack);
         btnBack.setOnClickListener(v -> finish());
 
+        ivAvatar = findViewById(R.id.ivAvatar);
+        btnChangeAvatar = findViewById(R.id.btnChangeAvatar);
         tvLoginValue = findViewById(R.id.tvLoginValue);
         tvEmailValue = findViewById(R.id.tvEmailValue);
         tvDisplayNameValue = findViewById(R.id.tvDisplayNameValue);
@@ -60,6 +82,19 @@ public class SettingsActivity extends AppCompatActivity {
         switchGroups = findViewById(R.id.switchGroups);
         switchFollows = findViewById(R.id.switchFollows);
         switchLikes = findViewById(R.id.switchLikes);
+        switchDarkMode = findViewById(R.id.switchDarkMode);
+
+        // Инициализация переключателя тёмной темы
+        if (switchDarkMode != null) {
+            switchDarkMode.setChecked(sessionManager.isDarkMode());
+            switchDarkMode.setOnCheckedChangeListener((btn, isChecked) -> {
+                sessionManager.setDarkMode(isChecked);
+                AppCompatDelegate.setDefaultNightMode(
+                        isChecked ? AppCompatDelegate.MODE_NIGHT_YES
+                                  : AppCompatDelegate.MODE_NIGHT_NO);
+                recreate(); // пересоздать активити чтобы применить тему
+            });
+        }
 
         loadProfile();
         setupClickListeners();
@@ -75,7 +110,7 @@ public class SettingsActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     currentProfile = response.body();
                     displayProfile(currentProfile);
-                    setupSwitchListeners(); // Ставим листенеры после загрузки данных
+                    setupSwitchListeners();
                 }
             }
 
@@ -91,6 +126,12 @@ public class SettingsActivity extends AppCompatActivity {
         if (tvEmailValue != null) tvEmailValue.setText(profile.getEmail() != null ? profile.getEmail() : "—");
         if (tvDisplayNameValue != null) tvDisplayNameValue.setText(profile.getDisplayName() != null ? profile.getDisplayName() : "—");
 
+        if (profile.getAvatarUrl() != null && !profile.getAvatarUrl().isEmpty()) {
+            Glide.with(this).load(profile.getAvatarUrl()).into(ivAvatar);
+        } else {
+            ivAvatar.setImageResource(R.color.asylum_red);
+        }
+
         if (switchMessages != null) switchMessages.setChecked(profile.isNotifyOnMessages());
         if (switchGroups != null) switchGroups.setChecked(profile.isNotifyOnGroups());
         if (switchFollows != null) switchFollows.setChecked(profile.isNotifyOnFollows());
@@ -101,6 +142,8 @@ public class SettingsActivity extends AppCompatActivity {
         if (rlDisplayName != null) rlDisplayName.setOnClickListener(v -> showEditDisplayNameDialog());
         if (rlEmail != null) rlEmail.setOnClickListener(v -> showEditEmailDialog());
         if (rlPassword != null) rlPassword.setOnClickListener(v -> showEditPasswordDialog());
+        if (btnChangeAvatar != null) btnChangeAvatar.setOnClickListener(v -> imagePickerLauncher.launch("image/*"));
+        if (ivAvatar != null) ivAvatar.setOnClickListener(v -> imagePickerLauncher.launch("image/*"));
     }
 
     private void setupSwitchListeners() {
@@ -109,6 +152,33 @@ public class SettingsActivity extends AppCompatActivity {
         if (switchGroups != null) switchGroups.setOnCheckedChangeListener(listener);
         if (switchFollows != null) switchFollows.setOnCheckedChangeListener(listener);
         if (switchLikes != null) switchLikes.setOnCheckedChangeListener(listener);
+    }
+
+    private void uploadAvatar(Uri uri) {
+        String token = sessionManager.getBearerToken();
+        if (token == null) return;
+
+        try {
+            InputStream is = getContentResolver().openInputStream(uri);
+            byte[] bytes = is.readAllBytes();
+            is.close();
+            RequestBody requestBody = RequestBody.create(bytes, MediaType.parse("image/*"));
+            MultipartBody.Part body = MultipartBody.Part.createFormData("images", "avatar.jpg", requestBody);
+            List<MultipartBody.Part> list = new ArrayList<>();
+            list.add(body);
+
+            apiService.uploadImages(token, list).enqueue(new Callback<MediaUploadResponse>() {
+                @Override
+                public void onResponse(Call<MediaUploadResponse> call, Response<MediaUploadResponse> response) {
+                    if (response.isSuccessful() && response.body() != null && !response.body().getUrls().isEmpty()) {
+                        updateSettings(new UpdateSettingsRequest().setAvatarUrl(response.body().getUrls().get(0)));
+                    }
+                }
+                @Override public void onFailure(Call<MediaUploadResponse> call, Throwable t) {}
+            });
+        } catch (Exception e) {
+            Toast.makeText(this, "Ошибка при чтении файла", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void showEditDisplayNameDialog() {
@@ -188,7 +258,6 @@ public class SettingsActivity extends AppCompatActivity {
                 Toast.makeText(this, "Заполните все поля", Toast.LENGTH_SHORT).show();
                 return;
             }
-            // Отправляем новый пароль (бэкенд пока не проверяет старый, но для UI запрашиваем)
             updateSettings(new UpdateSettingsRequest().setPassword(newPass));
         });
         builder.setNegativeButton("Отмена", (dialog, which) -> dialog.cancel());

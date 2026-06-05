@@ -4,6 +4,7 @@ package com.asylum.app.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -23,6 +24,15 @@ public final class FragmentProfileBinding implements ViewBinding {
   private final ConstraintLayout rootView;
 
   @NonNull
+  public final FrameLayout avatarContainer;
+
+  @NonNull
+  public final ImageView btnEditProfile;
+
+  @NonNull
+  public final LinearLayout btnEditStatus;
+
+  @NonNull
   public final LinearLayout btnFriends;
 
   @NonNull
@@ -35,13 +45,19 @@ public final class FragmentProfileBinding implements ViewBinding {
   public final LinearLayout btnSettingsBottom;
 
   @NonNull
-  public final ConstraintLayout clProfileInfo;
+  public final View dot1;
+
+  @NonNull
+  public final View dot2;
 
   @NonNull
   public final LinearLayout header;
 
   @NonNull
   public final CircleImageView ivAvatar;
+
+  @NonNull
+  public final FrameLayout statusBubble;
 
   @NonNull
   public final TextView tvAvatarLetter;
@@ -53,40 +69,38 @@ public final class FragmentProfileBinding implements ViewBinding {
   public final TextView tvFullName;
 
   @NonNull
-  public final TextView tvStatusBubble;
+  public final TextView tvStatusText;
 
   @NonNull
   public final TextView tvUsername;
 
-  @NonNull
-  public final View vTailLarge;
-
-  @NonNull
-  public final View vTailSmall;
-
   private FragmentProfileBinding(@NonNull ConstraintLayout rootView,
-      @NonNull LinearLayout btnFriends, @NonNull ImageView btnLogout,
-      @NonNull LinearLayout btnMyPosts, @NonNull LinearLayout btnSettingsBottom,
-      @NonNull ConstraintLayout clProfileInfo, @NonNull LinearLayout header,
-      @NonNull CircleImageView ivAvatar, @NonNull TextView tvAvatarLetter,
+      @NonNull FrameLayout avatarContainer, @NonNull ImageView btnEditProfile,
+      @NonNull LinearLayout btnEditStatus, @NonNull LinearLayout btnFriends,
+      @NonNull ImageView btnLogout, @NonNull LinearLayout btnMyPosts,
+      @NonNull LinearLayout btnSettingsBottom, @NonNull View dot1, @NonNull View dot2,
+      @NonNull LinearLayout header, @NonNull CircleImageView ivAvatar,
+      @NonNull FrameLayout statusBubble, @NonNull TextView tvAvatarLetter,
       @NonNull TextView tvFriendsCount, @NonNull TextView tvFullName,
-      @NonNull TextView tvStatusBubble, @NonNull TextView tvUsername, @NonNull View vTailLarge,
-      @NonNull View vTailSmall) {
+      @NonNull TextView tvStatusText, @NonNull TextView tvUsername) {
     this.rootView = rootView;
+    this.avatarContainer = avatarContainer;
+    this.btnEditProfile = btnEditProfile;
+    this.btnEditStatus = btnEditStatus;
     this.btnFriends = btnFriends;
     this.btnLogout = btnLogout;
     this.btnMyPosts = btnMyPosts;
     this.btnSettingsBottom = btnSettingsBottom;
-    this.clProfileInfo = clProfileInfo;
+    this.dot1 = dot1;
+    this.dot2 = dot2;
     this.header = header;
     this.ivAvatar = ivAvatar;
+    this.statusBubble = statusBubble;
     this.tvAvatarLetter = tvAvatarLetter;
     this.tvFriendsCount = tvFriendsCount;
     this.tvFullName = tvFullName;
-    this.tvStatusBubble = tvStatusBubble;
+    this.tvStatusText = tvStatusText;
     this.tvUsername = tvUsername;
-    this.vTailLarge = vTailLarge;
-    this.vTailSmall = vTailSmall;
   }
 
   @Override
@@ -116,6 +130,24 @@ public final class FragmentProfileBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
+      id = R.id.avatarContainer;
+      FrameLayout avatarContainer = ViewBindings.findChildViewById(rootView, id);
+      if (avatarContainer == null) {
+        break missingId;
+      }
+
+      id = R.id.btnEditProfile;
+      ImageView btnEditProfile = ViewBindings.findChildViewById(rootView, id);
+      if (btnEditProfile == null) {
+        break missingId;
+      }
+
+      id = R.id.btnEditStatus;
+      LinearLayout btnEditStatus = ViewBindings.findChildViewById(rootView, id);
+      if (btnEditStatus == null) {
+        break missingId;
+      }
+
       id = R.id.btnFriends;
       LinearLayout btnFriends = ViewBindings.findChildViewById(rootView, id);
       if (btnFriends == null) {
@@ -140,9 +172,15 @@ public final class FragmentProfileBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.clProfileInfo;
-      ConstraintLayout clProfileInfo = ViewBindings.findChildViewById(rootView, id);
-      if (clProfileInfo == null) {
+      id = R.id.dot1;
+      View dot1 = ViewBindings.findChildViewById(rootView, id);
+      if (dot1 == null) {
+        break missingId;
+      }
+
+      id = R.id.dot2;
+      View dot2 = ViewBindings.findChildViewById(rootView, id);
+      if (dot2 == null) {
         break missingId;
       }
 
@@ -155,6 +193,12 @@ public final class FragmentProfileBinding implements ViewBinding {
       id = R.id.ivAvatar;
       CircleImageView ivAvatar = ViewBindings.findChildViewById(rootView, id);
       if (ivAvatar == null) {
+        break missingId;
+      }
+
+      id = R.id.statusBubble;
+      FrameLayout statusBubble = ViewBindings.findChildViewById(rootView, id);
+      if (statusBubble == null) {
         break missingId;
       }
 
@@ -176,9 +220,9 @@ public final class FragmentProfileBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.tvStatusBubble;
-      TextView tvStatusBubble = ViewBindings.findChildViewById(rootView, id);
-      if (tvStatusBubble == null) {
+      id = R.id.tvStatusText;
+      TextView tvStatusText = ViewBindings.findChildViewById(rootView, id);
+      if (tvStatusText == null) {
         break missingId;
       }
 
@@ -188,21 +232,10 @@ public final class FragmentProfileBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.vTailLarge;
-      View vTailLarge = ViewBindings.findChildViewById(rootView, id);
-      if (vTailLarge == null) {
-        break missingId;
-      }
-
-      id = R.id.vTailSmall;
-      View vTailSmall = ViewBindings.findChildViewById(rootView, id);
-      if (vTailSmall == null) {
-        break missingId;
-      }
-
-      return new FragmentProfileBinding((ConstraintLayout) rootView, btnFriends, btnLogout,
-          btnMyPosts, btnSettingsBottom, clProfileInfo, header, ivAvatar, tvAvatarLetter,
-          tvFriendsCount, tvFullName, tvStatusBubble, tvUsername, vTailLarge, vTailSmall);
+      return new FragmentProfileBinding((ConstraintLayout) rootView, avatarContainer,
+          btnEditProfile, btnEditStatus, btnFriends, btnLogout, btnMyPosts, btnSettingsBottom, dot1,
+          dot2, header, ivAvatar, statusBubble, tvAvatarLetter, tvFriendsCount, tvFullName,
+          tvStatusText, tvUsername);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

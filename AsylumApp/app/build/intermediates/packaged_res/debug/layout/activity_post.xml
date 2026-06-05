@@ -74,6 +74,18 @@
             android:clickable="true"
             android:focusable="true"
             app:tint="@color/text_primary" />
+
+        <ImageView
+            android:id="@+id/btnDeletePost"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="16dp"
+            android:src="@android:drawable/ic_menu_delete"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:visibility="gone"
+            app:tint="@color/asylum_red" />
     </LinearLayout>
 
     <View

@@ -1,7 +1,10 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   ParseIntPipe,
   Post,
@@ -42,5 +45,16 @@ export class PostsController {
     @CurrentUser() userId: number,
   ) {
     return this.postsService.toggleLike(userId, postId);
+  }
+
+  @Delete(':id')
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
+  @HttpCode(HttpStatus.NO_CONTENT)
+  deletePost(
+    @Param('id', ParseIntPipe) postId: number,
+    @CurrentUser() userId: number,
+  ) {
+    return this.postsService.deletePost(postId, userId);
   }
 }

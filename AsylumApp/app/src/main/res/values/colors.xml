@@ -5,16 +5,16 @@
     <color name="asylum_red_dark">#6B1414</color>
     <color name="asylum_red_ripple">#228B1A1A</color>
 
-    <!-- Background -->
+    <!-- Background (Light) -->
     <color name="background_white">#FFFFFF</color>
 
-    <!-- Text Colors -->
+    <!-- Text Colors (Light) -->
     <color name="text_primary">#333333</color>
     <color name="text_secondary">#888888</color>
     <color name="text_hint">#AAAAAA</color>
     <color name="text_link">#8B1A1A</color>
 
-    <!-- Input Fields -->
+    <!-- Input Fields (Light) -->
     <color name="input_background">#F2F2F2</color>
 
     <!-- Button -->
@@ -22,4 +22,13 @@
 
     <!-- Error -->
     <color name="error_red">#D32F2F</color>
+
+    <!-- Dark Theme Colors -->
+    <color name="dark_background">#121212</color>
+    <color name="dark_surface">#1E1E1E</color>
+    <color name="dark_surface_elevated">#2C2C2C</color>
+    <color name="dark_text_primary">#EFEFEF</color>
+    <color name="dark_text_secondary">#AAAAAA</color>
+    <color name="dark_input_background">#2A2A2A</color>
+    <color name="dark_divider">#333333</color>
 </resources>

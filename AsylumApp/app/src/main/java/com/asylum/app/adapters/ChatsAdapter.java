@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.asylum.app.ChatActivity;
 import com.asylum.app.R;
 import com.asylum.app.models.Chat;
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -41,6 +42,18 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ChatViewHold
         holder.tvLastMessage.setText(chat.getLastMessageText());
         holder.tvTime.setText(chat.getLastMessageTime());
         holder.tvAvatarLetter.setText(chat.getAvatarLetter());
+
+        // Загрузка аватарки собеседника
+        String avatarUrl = (chat.getUser() != null) ? chat.getUser().getAvatarUrl() : null;
+        if (avatarUrl != null && !avatarUrl.isEmpty() && holder.ivUserAvatar != null) {
+            holder.ivUserAvatar.setVisibility(View.VISIBLE);
+            Glide.with(holder.itemView.getContext())
+                    .load(avatarUrl)
+                    .circleCrop()
+                    .into(holder.ivUserAvatar);
+        } else if (holder.ivUserAvatar != null) {
+            holder.ivUserAvatar.setVisibility(View.GONE);
+        }
 
         // Иконка заглушенного чата справа от ника
         if (holder.ivMuteStatus != null) {
@@ -75,6 +88,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ChatViewHold
     static class ChatViewHolder extends RecyclerView.ViewHolder {
         TextView tvParticipantName, tvLastMessage, tvTime, tvAvatarLetter, tvUnreadCount;
         ImageView ivMuteStatus;
+        ImageView ivUserAvatar;
 
         public ChatViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -84,6 +98,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ChatViewHold
             tvAvatarLetter = itemView.findViewById(R.id.tvAvatarLetter);
             tvUnreadCount = itemView.findViewById(R.id.tvUnreadCount);
             ivMuteStatus = itemView.findViewById(R.id.ivMuteStatus);
+            ivUserAvatar = itemView.findViewById(R.id.ivUserAvatar);
         }
     }
 }

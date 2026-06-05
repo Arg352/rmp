@@ -26,6 +26,9 @@ public final class ActivityCreatePostBinding implements ViewBinding {
   private final ConstraintLayout rootView;
 
   @NonNull
+  public final LinearLayout attachmentsContainer;
+
+  @NonNull
   public final LinearLayout btnAttachFile;
 
   @NonNull
@@ -74,8 +77,8 @@ public final class ActivityCreatePostBinding implements ViewBinding {
   public final TextView tvVisibility;
 
   private ActivityCreatePostBinding(@NonNull ConstraintLayout rootView,
-      @NonNull LinearLayout btnAttachFile, @NonNull ImageView btnBack,
-      @NonNull Button btnCreatePost, @NonNull ImageView btnEditName,
+      @NonNull LinearLayout attachmentsContainer, @NonNull LinearLayout btnAttachFile,
+      @NonNull ImageView btnBack, @NonNull Button btnCreatePost, @NonNull ImageView btnEditName,
       @NonNull LinearLayout btnVisibility, @NonNull CheckBox cbAnonymous,
       @NonNull EditText etContent, @NonNull EditText etTags, @NonNull EditText etTitle,
       @NonNull LinearLayout header, @NonNull CircleImageView ivUserAvatar,
@@ -83,6 +86,7 @@ public final class ActivityCreatePostBinding implements ViewBinding {
       @NonNull TextView tvHeaderUsername, @NonNull TextView tvLinkInfo,
       @NonNull TextView tvVisibility) {
     this.rootView = rootView;
+    this.attachmentsContainer = attachmentsContainer;
     this.btnAttachFile = btnAttachFile;
     this.btnBack = btnBack;
     this.btnCreatePost = btnCreatePost;
@@ -128,6 +132,12 @@ public final class ActivityCreatePostBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
+      id = R.id.attachmentsContainer;
+      LinearLayout attachmentsContainer = ViewBindings.findChildViewById(rootView, id);
+      if (attachmentsContainer == null) {
+        break missingId;
+      }
+
       id = R.id.btnAttachFile;
       LinearLayout btnAttachFile = ViewBindings.findChildViewById(rootView, id);
       if (btnAttachFile == null) {
@@ -224,10 +234,10 @@ public final class ActivityCreatePostBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ActivityCreatePostBinding((ConstraintLayout) rootView, btnAttachFile, btnBack,
-          btnCreatePost, btnEditName, btnVisibility, cbAnonymous, etContent, etTags, etTitle,
-          header, ivUserAvatar, progressLayout, tvHeaderDisplayName, tvHeaderUsername, tvLinkInfo,
-          tvVisibility);
+      return new ActivityCreatePostBinding((ConstraintLayout) rootView, attachmentsContainer,
+          btnAttachFile, btnBack, btnCreatePost, btnEditName, btnVisibility, cbAnonymous, etContent,
+          etTags, etTitle, header, ivUserAvatar, progressLayout, tvHeaderDisplayName,
+          tvHeaderUsername, tvLinkInfo, tvVisibility);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Base application theme -->
+    <!-- Base application theme (Light) -->
     <style name="Theme.AsylumApp" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/asylum_red</item>
         <item name="colorPrimaryDark">@color/asylum_red_dark</item>
@@ -18,6 +18,29 @@
 
         <!-- Dialog Style -->
         <item name="alertDialogTheme">@style/AsylumAlertDialogTheme</item>
+    </style>
+
+    <!-- Dark application theme -->
+    <style name="Theme.AsylumApp.Dark" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="colorPrimary">@color/asylum_red</item>
+        <item name="colorPrimaryDark">@color/asylum_red_dark</item>
+        <item name="colorAccent">@color/asylum_red</item>
+        <item name="android:windowBackground">@color/dark_background</item>
+        <item name="android:statusBarColor">@color/dark_surface</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:navigationBarColor">@color/dark_background</item>
+
+        <!-- Popup Menu Style -->
+        <item name="popupMenuStyle">@style/AsylumPopupMenu.Dark</item>
+        <item name="android:textAppearanceLargePopupMenu">@style/AsylumPopupTextAppearance.Dark</item>
+        <item name="android:textAppearanceSmallPopupMenu">@style/AsylumPopupTextAppearance.Dark</item>
+
+        <!-- Dialog Style -->
+        <item name="alertDialogTheme">@style/AsylumAlertDialogTheme.Dark</item>
+    </style>
+
+    <style name="RoundedCorner">
+        <item name="cornerSize">8dp</item>
     </style>
 
     <style name="AsylumPopupMenu" parent="Widget.AppCompat.PopupMenu">
@@ -109,6 +132,29 @@
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">#888888</item>
         <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <!-- Dark variants -->
+    <style name="AsylumPopupMenu.Dark" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:popupBackground">@color/dark_surface_elevated</item>
+    </style>
+
+    <style name="AsylumPopupTextAppearance.Dark" parent="TextAppearance.AppCompat.Menu">
+        <item name="android:textColor">@color/dark_text_primary</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="AsylumAlertDialogTheme.Dark" parent="Theme.MaterialComponents.Dialog.Alert">
+        <item name="colorPrimary">@color/asylum_red</item>
+        <item name="colorAccent">@color/asylum_red</item>
+        <item name="android:windowBackground">@color/dark_surface</item>
+        <item name="android:textColorPrimary">@color/dark_text_primary</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.Asylum.Medium</item>
+    </style>
+
+    <!-- Splash Screen theme Dark -->
+    <style name="Theme.AsylumApp.Splash.Dark" parent="Theme.AsylumApp.Dark">
+        <item name="android:windowBackground">@color/dark_background</item>
     </style>
 
 </resources>

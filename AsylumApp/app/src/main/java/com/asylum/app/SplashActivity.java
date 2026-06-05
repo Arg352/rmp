@@ -6,14 +6,14 @@ import android.os.Handler;
 import android.os.Looper;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import com.asylum.app.api.SocketManager;
 import com.asylum.app.utils.SessionManager;
 
 /**
  * Splash Screen — показывается при запуске.
- * Если пользователь уже залогинен (есть токен) — переходим на MainActivity.
- * Иначе — на LoginActivity.
+ * Применяет сохранённую тему, затем переходит на MainActivity или LoginActivity.
  */
 public class SplashActivity extends AppCompatActivity {
 
@@ -21,16 +21,21 @@ public class SplashActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Применяем сохранённую тему ДО setContentView
+        SessionManager session = new SessionManager(this);
+        AppCompatDelegate.setDefaultNightMode(
+                session.isDarkMode()
+                        ? AppCompatDelegate.MODE_NIGHT_YES
+                        : AppCompatDelegate.MODE_NIGHT_NO
+        );
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            SessionManager session = new SessionManager(this);
-
             Class<?> nextActivity;
             if (session.isLoggedIn()) {
                 nextActivity = MainActivity.class;
-                // Подключаем WebSocket при автологине
                 SocketManager.getInstance().connect(session.getToken());
             } else {
                 nextActivity = LoginActivity.class;

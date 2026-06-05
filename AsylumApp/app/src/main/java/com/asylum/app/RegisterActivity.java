@@ -22,6 +22,8 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONObject;
 
+import java.io.IOException;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -96,7 +98,7 @@ public class RegisterActivity extends AppCompatActivity {
             tilUsername.setError("Введите имя пользователя");
             return false;
         }
-        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        if (TextUtils.isEmpty(email) || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             tilEmail.setError(getString(R.string.error_invalid_email));
             return false;
         }
@@ -112,14 +114,6 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void performRegister() {
-        // region DEBUG: Гостевая регистрация
-        if (getUsernameText().equalsIgnoreCase("admin")) {
-            sessionManager.saveToken("mock_guest_token");
-            navigateToMain();
-            return;
-        }
-        // endregion
-
         setLoading(true);
         RegisterRequest request = new RegisterRequest(getUsernameText(), getEmailText(), getPasswordText(), getConfirmPasswordText());
 
@@ -128,10 +122,12 @@ public class RegisterActivity extends AppCompatActivity {
             public void onResponse(Call<AuthResponse> call, Response<AuthResponse> response) {
                 setLoading(false);
                 if (response.isSuccessful() && response.body() != null) {
-                    String token = response.body().getAccessToken();
-                    sessionManager.saveToken(token);
-                    // Подключаем WebSocket сразу после регистрации
-                    SocketManager.getInstance().connect(token);
+                    AuthResponse auth = response.body();
+                    sessionManager.saveToken(auth.getAccessToken());
+                    if (auth.getUser() != null) {
+                        sessionManager.saveUser(auth.getUser().getId(), auth.getUser().getUsername());
+                    }
+                    SocketManager.getInstance().connect(auth.getAccessToken());
                     navigateToMain();
                 } else {
                     showError(parseErrorMessage(response));
@@ -172,6 +168,13 @@ public class RegisterActivity extends AppCompatActivity {
     private void hideError() { tvError.setVisibility(View.GONE); }
 
     private String parseErrorMessage(Response<?> response) {
-        return "Ошибка сервера: " + response.code();
+        try {
+            if (response.errorBody() != null) {
+                String errorJson = response.errorBody().string();
+                JSONObject obj = new JSONObject(errorJson);
+                if (obj.has("message")) return obj.getString("message");
+            }
+        } catch (Exception ignored) {}
+        return "Ошибка регистрации: " + response.code();
     }
 }

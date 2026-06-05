@@ -11,6 +11,7 @@ public class SessionManager {
     private static final String KEY_TOKEN = "access_token";
     private static final String KEY_USER_ID = "user_id";
     private static final String KEY_USERNAME = "username";
+    private static final String KEY_DARK_MODE = "dark_mode";
 
     private final SharedPreferences prefs;
     private final SharedPreferences.Editor editor;
@@ -64,5 +65,16 @@ public class SessionManager {
     public void logout() {
         editor.clear();
         editor.apply();
+    }
+
+    /** Сохранить настройку тёмной темы */
+    public void setDarkMode(boolean enabled) {
+        editor.putBoolean(KEY_DARK_MODE, enabled);
+        editor.apply();
+    }
+
+    /** Получить текущую настройку тёмной темы */
+    public boolean isDarkMode() {
+        return prefs.getBoolean(KEY_DARK_MODE, false);
     }
 }

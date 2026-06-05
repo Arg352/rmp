@@ -45,6 +45,10 @@ public class Message {
     public int getReceiverId() { return receiverId; }
     public List<ImageAttachment> getAttachments() { return attachments; }
 
+    public void setAttachments(List<ImageAttachment> attachments) {
+        this.attachments = attachments;
+    }
+
     /** Определяем "исходящее" ли сообщение по senderId */
     public boolean isOutgoing(int myUserId) {
         return senderId == myUserId;

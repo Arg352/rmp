@@ -56,20 +56,20 @@ public class SearchUserAdapter extends RecyclerView.Adapter<SearchUserAdapter.Vi
                 user.getFullName().isEmpty() ? "?" : user.getFullName().substring(0, 1).toUpperCase()
         );
 
-        String status = user.getStatus(); // "FRIEND", "SENT", "RECEIVED", "NONE"
+        String status = user.getStatus(); 
         
         if ("FRIEND".equals(status)) {
             holder.tvStatus.setText("У вас в друзьях");
             holder.tvStatus.setTextColor(holder.itemView.getContext().getResources().getColor(R.color.asylum_red));
-            holder.ivIcon.setImageResource(R.drawable.ic_profile);
-            holder.ivIcon.setAlpha(0.6f);
-            holder.ivIcon.setEnabled(false);
+            holder.ivIcon.setImageResource(android.R.drawable.ic_menu_delete); // Иконка удаления
+            holder.ivIcon.setAlpha(1.0f);
+            holder.ivIcon.setEnabled(true);
         } else if ("SENT".equals(status)) {
             holder.tvStatus.setText("Заявка отправлена");
             holder.tvStatus.setTextColor(holder.itemView.getContext().getResources().getColor(R.color.text_secondary));
-            holder.ivIcon.setImageResource(android.R.drawable.checkbox_on_background);
-            holder.ivIcon.setAlpha(0.7f);
-            holder.ivIcon.setEnabled(false);
+            holder.ivIcon.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
+            holder.ivIcon.setAlpha(1.0f);
+            holder.ivIcon.setEnabled(true);
         } else if ("RECEIVED".equals(status)) {
             holder.tvStatus.setText("Хочет в друзья");
             holder.tvStatus.setTextColor(holder.itemView.getContext().getResources().getColor(R.color.asylum_red));
@@ -96,17 +96,20 @@ public class SearchUserAdapter extends RecyclerView.Adapter<SearchUserAdapter.Vi
                         @Override
                         public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                             if (response.isSuccessful()) {
-                                if ("RECEIVED".equals(user.getStatus())) {
+                                String msg = "Выполнено";
+                                if ("FRIEND".equals(user.getStatus()) || "SENT".equals(user.getStatus())) {
+                                    user.setStatus("NONE");
+                                    msg = "Удалено";
+                                } else if ("RECEIVED".equals(user.getStatus())) {
                                     user.setStatus("FRIEND");
-                                    Toast.makeText(v.getContext(), "Заявка принята", Toast.LENGTH_SHORT).show();
+                                    msg = "Заявка принята";
                                 } else {
                                     user.setStatus("SENT");
-                                    Toast.makeText(v.getContext(), "Заявка отправлена", Toast.LENGTH_SHORT).show();
+                                    msg = "Заявка отправлена";
                                 }
+                                Toast.makeText(v.getContext(), msg, Toast.LENGTH_SHORT).show();
                                 notifyItemChanged(holder.getAdapterPosition());
                                 if (listener != null) listener.onActionComplete();
-                            } else {
-                                Toast.makeText(v.getContext(), "Ошибка сервера", Toast.LENGTH_SHORT).show();
                             }
                         }
 
@@ -116,9 +119,7 @@ public class SearchUserAdapter extends RecyclerView.Adapter<SearchUserAdapter.Vi
                         }
                     });
                 }
-            } catch (NumberFormatException e) {
-                Toast.makeText(v.getContext(), "Ошибка ID", Toast.LENGTH_SHORT).show();
-            }
+            } catch (NumberFormatException e) {}
         });
     }
 

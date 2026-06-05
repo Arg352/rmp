@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,7 +26,13 @@ public final class ItemPostBinding implements ViewBinding {
   public final ChipGroup cgTags;
 
   @NonNull
+  public final LinearLayout imagesContainer;
+
+  @NonNull
   public final ImageView ivLike;
+
+  @NonNull
+  public final ImageView ivUserAvatar;
 
   @NonNull
   public final TextView tvAuthorName;
@@ -46,12 +53,15 @@ public final class ItemPostBinding implements ViewBinding {
   public final TextView tvViews;
 
   private ItemPostBinding(@NonNull MaterialCardView rootView, @NonNull ChipGroup cgTags,
-      @NonNull ImageView ivLike, @NonNull TextView tvAuthorName, @NonNull TextView tvPostContent,
-      @NonNull TextView tvPostLetter, @NonNull TextView tvPostTitle, @NonNull TextView tvTimeAgo,
-      @NonNull TextView tvViews) {
+      @NonNull LinearLayout imagesContainer, @NonNull ImageView ivLike,
+      @NonNull ImageView ivUserAvatar, @NonNull TextView tvAuthorName,
+      @NonNull TextView tvPostContent, @NonNull TextView tvPostLetter,
+      @NonNull TextView tvPostTitle, @NonNull TextView tvTimeAgo, @NonNull TextView tvViews) {
     this.rootView = rootView;
     this.cgTags = cgTags;
+    this.imagesContainer = imagesContainer;
     this.ivLike = ivLike;
+    this.ivUserAvatar = ivUserAvatar;
     this.tvAuthorName = tvAuthorName;
     this.tvPostContent = tvPostContent;
     this.tvPostLetter = tvPostLetter;
@@ -93,9 +103,21 @@ public final class ItemPostBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.imagesContainer;
+      LinearLayout imagesContainer = ViewBindings.findChildViewById(rootView, id);
+      if (imagesContainer == null) {
+        break missingId;
+      }
+
       id = R.id.ivLike;
       ImageView ivLike = ViewBindings.findChildViewById(rootView, id);
       if (ivLike == null) {
+        break missingId;
+      }
+
+      id = R.id.ivUserAvatar;
+      ImageView ivUserAvatar = ViewBindings.findChildViewById(rootView, id);
+      if (ivUserAvatar == null) {
         break missingId;
       }
 
@@ -135,8 +157,8 @@ public final class ItemPostBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ItemPostBinding((MaterialCardView) rootView, cgTags, ivLike, tvAuthorName,
-          tvPostContent, tvPostLetter, tvPostTitle, tvTimeAgo, tvViews);
+      return new ItemPostBinding((MaterialCardView) rootView, cgTags, imagesContainer, ivLike,
+          ivUserAvatar, tvAuthorName, tvPostContent, tvPostLetter, tvPostTitle, tvTimeAgo, tvViews);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

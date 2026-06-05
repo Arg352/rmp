@@ -1,11 +1,11 @@
 [
     {
-        "merged": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-mergeDebugResources-34:\\layout\\activity_main.xml",
-        "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\layout\\activity_main.xml"
-    },
-    {
         "merged": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-mergeDebugResources-34:\\layout\\activity_splash.xml",
         "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\layout\\activity_splash.xml"
+    },
+    {
+        "merged": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-mergeDebugResources-34:\\layout\\activity_main.xml",
+        "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\layout\\activity_main.xml"
     },
     {
         "merged": "com.asylum.app-mergeDebugResources-34:/layout/fragment_profile.xml",
@@ -16,12 +16,12 @@
         "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\layout\\item_contact.xml"
     },
     {
-        "merged": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-mergeDebugResources-34:\\layout\\activity_post.xml",
-        "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\layout\\activity_post.xml"
-    },
-    {
         "merged": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-mergeDebugResources-34:\\layout\\fragment_posts.xml",
         "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\layout\\fragment_posts.xml"
+    },
+    {
+        "merged": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-mergeDebugResources-34:\\layout\\activity_post.xml",
+        "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\layout\\activity_post.xml"
     },
     {
         "merged": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-mergeDebugResources-34:\\layout\\activity_settings.xml",
@@ -36,16 +36,8 @@
         "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\layout\\fragment_chats.xml"
     },
     {
-        "merged": "com.asylum.app-mergeDebugResources-34:/layout/activity_select_contact.xml",
-        "source": "com.asylum.app-main-37:/layout/activity_select_contact.xml"
-    },
-    {
         "merged": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-mergeDebugResources-34:\\layout\\activity_register.xml",
         "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\layout\\activity_register.xml"
-    },
-    {
-        "merged": "com.asylum.app-mergeDebugResources-34:/layout/fragment_posts.xml",
-        "source": "com.asylum.app-main-37:/layout/fragment_posts.xml"
     },
     {
         "merged": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-mergeDebugResources-34:\\layout\\item_message_outgoing.xml",
@@ -80,15 +72,15 @@
         "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\layout\\activity_select_contact.xml"
     },
     {
+        "merged": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-mergeDebugResources-34:\\layout\\item_attachment_preview.xml",
+        "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\layout\\item_attachment_preview.xml"
+    },
+    {
         "merged": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-mergeDebugResources-34:\\layout\\dialog_add_friend.xml",
         "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\layout\\dialog_add_friend.xml"
     },
     {
         "merged": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-mergeDebugResources-34:\\layout\\fragment_profile.xml",
         "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\layout\\fragment_profile.xml"
-    },
-    {
-        "merged": "com.asylum.app-mergeDebugResources-34:/layout/activity_main.xml",
-        "source": "com.asylum.app-main-37:/layout/activity_main.xml"
     }
 ]

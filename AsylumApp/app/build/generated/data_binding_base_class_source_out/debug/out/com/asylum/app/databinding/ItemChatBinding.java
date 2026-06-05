@@ -24,6 +24,9 @@ public final class ItemChatBinding implements ViewBinding {
   public final ImageView ivMuteStatus;
 
   @NonNull
+  public final ImageView ivUserAvatar;
+
+  @NonNull
   public final TextView tvAvatarLetter;
 
   @NonNull
@@ -39,11 +42,12 @@ public final class ItemChatBinding implements ViewBinding {
   public final TextView tvUnreadCount;
 
   private ItemChatBinding(@NonNull LinearLayout rootView, @NonNull ImageView ivMuteStatus,
-      @NonNull TextView tvAvatarLetter, @NonNull TextView tvLastMessage,
-      @NonNull TextView tvParticipantName, @NonNull TextView tvTime,
-      @NonNull TextView tvUnreadCount) {
+      @NonNull ImageView ivUserAvatar, @NonNull TextView tvAvatarLetter,
+      @NonNull TextView tvLastMessage, @NonNull TextView tvParticipantName,
+      @NonNull TextView tvTime, @NonNull TextView tvUnreadCount) {
     this.rootView = rootView;
     this.ivMuteStatus = ivMuteStatus;
+    this.ivUserAvatar = ivUserAvatar;
     this.tvAvatarLetter = tvAvatarLetter;
     this.tvLastMessage = tvLastMessage;
     this.tvParticipantName = tvParticipantName;
@@ -84,6 +88,12 @@ public final class ItemChatBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.ivUserAvatar;
+      ImageView ivUserAvatar = ViewBindings.findChildViewById(rootView, id);
+      if (ivUserAvatar == null) {
+        break missingId;
+      }
+
       id = R.id.tvAvatarLetter;
       TextView tvAvatarLetter = ViewBindings.findChildViewById(rootView, id);
       if (tvAvatarLetter == null) {
@@ -114,8 +124,8 @@ public final class ItemChatBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ItemChatBinding((LinearLayout) rootView, ivMuteStatus, tvAvatarLetter,
-          tvLastMessage, tvParticipantName, tvTime, tvUnreadCount);
+      return new ItemChatBinding((LinearLayout) rootView, ivMuteStatus, ivUserAvatar,
+          tvAvatarLetter, tvLastMessage, tvParticipantName, tvTime, tvUnreadCount);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

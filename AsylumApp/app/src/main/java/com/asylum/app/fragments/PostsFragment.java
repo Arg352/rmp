@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.asylum.app.CreatePostActivity;
+import com.asylum.app.MainActivity;
 import com.asylum.app.R;
 import com.asylum.app.adapters.PostsAdapter;
 import com.asylum.app.api.ApiService;
@@ -79,6 +80,16 @@ public class PostsFragment extends Fragment {
         initViews(view);
         setupMenus();
         setupSearch();
+        
+        if (getActivity() != null && getActivity().getIntent().hasExtra("FILTER_TAG")) {
+            String tag = getActivity().getIntent().getStringExtra("FILTER_TAG");
+            if (tag != null) {
+                etSearch.setText("#" + tag);
+                searchQuery = "#" + tag.toLowerCase();
+            }
+            getActivity().getIntent().removeExtra("FILTER_TAG");
+        }
+
         loadFeed();
 
         fabAddPost.setOnClickListener(v -> {
@@ -89,7 +100,6 @@ public class PostsFragment extends Fragment {
         return view;
     }
 
-    /** Метод для внешнего обновления фильтра (например, из MainActivity) */
     public void setFilterMode(String filter) {
         this.currentFilter = filter;
         if (tvFilterUser != null) {
@@ -108,7 +118,17 @@ public class PostsFragment extends Fragment {
         rvPosts = view.findViewById(R.id.rvPosts);
         rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
         
-        adapter = new PostsAdapter(new ArrayList<>(), this::onLikeClicked);
+        adapter = new PostsAdapter(new ArrayList<>(), new PostsAdapter.OnPostInteractionListener() {
+            @Override
+            public void onLikeClick(Post post, int position) {
+                onLikeClicked(post, position);
+            }
+
+            @Override
+            public void onTagClick(String tag) {
+                etSearch.setText("#" + tag);
+            }
+        });
         rvPosts.setAdapter(adapter);
 
         tvFilterUser = view.findViewById(R.id.tvFilterUser);
@@ -210,6 +230,7 @@ public class PostsFragment extends Fragment {
             @Override
             public void onFailure(@NonNull Call<List<Post>> call, @NonNull Throwable t) {
                 if (swipeRefresh != null) swipeRefresh.setRefreshing(false);
+                Toast.makeText(getContext(), "Ошибка сети", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -219,11 +240,27 @@ public class PostsFragment extends Fragment {
         int myUserId = sessionManager.getUserId();
 
         for (Post post : allPosts) {
-            boolean matchesSearch = searchQuery.isEmpty() ||
-                    (post.getTitle() != null && post.getTitle().toLowerCase().contains(searchQuery)) ||
-                    (post.getText() != null && post.getText().toLowerCase().contains(searchQuery)) ||
-                    (post.getTags() != null && post.getTags().toLowerCase().contains(searchQuery)) ||
-                    (post.getAuthorName() != null && post.getAuthorName().toLowerCase().contains(searchQuery));
+            boolean matchesSearch;
+            if (searchQuery.startsWith("#") && searchQuery.length() > 1) {
+                String targetTag = searchQuery.substring(1).toLowerCase();
+                matchesSearch = false;
+                if (post.getTags() != null) {
+                    String[] tags = post.getTags().toLowerCase().split("[,\\s]+");
+                    for (String t : tags) {
+                        String cleanT = t.startsWith("#") ? t.substring(1) : t;
+                        if (cleanT.equals(targetTag)) {
+                            matchesSearch = true;
+                            break;
+                        }
+                    }
+                }
+            } else {
+                matchesSearch = searchQuery.isEmpty() ||
+                        (post.getTitle() != null && post.getTitle().toLowerCase().contains(searchQuery)) ||
+                        (post.getText() != null && post.getText().toLowerCase().contains(searchQuery)) ||
+                        (post.getTags() != null && post.getTags().toLowerCase().contains(searchQuery)) ||
+                        (post.getAuthorName() != null && post.getAuthorName().toLowerCase().contains(searchQuery));
+            }
 
             if (!matchesSearch) continue;
 
@@ -266,11 +303,17 @@ public class PostsFragment extends Fragment {
 
         apiService.toggleLike(token, post.getId()).enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {}
+            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                if (!response.isSuccessful()) {
+                    post.toggleLike();
+                    if (adapter != null) adapter.notifyItemChanged(position);
+                }
+            }
             @Override
             public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
                 post.toggleLike();
                 if (adapter != null) adapter.notifyItemChanged(position);
+                Toast.makeText(getContext(), "Ошибка сети", Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -14,6 +14,13 @@ public class ImageAttachment {
     @SerializedName("url")
     private String url;
 
+    public ImageAttachment() {
+    }
+
+    public ImageAttachment(String url) {
+        this.url = url;
+    }
+
     public int getId() { return id; }
     public String getUrl() { return url; }
 }

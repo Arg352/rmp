@@ -20,14 +20,19 @@ public final class ItemMessageIncomingBinding implements ViewBinding {
   private final LinearLayout rootView;
 
   @NonNull
+  public final LinearLayout imagesContainer;
+
+  @NonNull
   public final TextView tvMessageText;
 
   @NonNull
   public final TextView tvMessageTime;
 
   private ItemMessageIncomingBinding(@NonNull LinearLayout rootView,
-      @NonNull TextView tvMessageText, @NonNull TextView tvMessageTime) {
+      @NonNull LinearLayout imagesContainer, @NonNull TextView tvMessageText,
+      @NonNull TextView tvMessageTime) {
     this.rootView = rootView;
+    this.imagesContainer = imagesContainer;
     this.tvMessageText = tvMessageText;
     this.tvMessageTime = tvMessageTime;
   }
@@ -59,6 +64,12 @@ public final class ItemMessageIncomingBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
+      id = R.id.imagesContainer;
+      LinearLayout imagesContainer = ViewBindings.findChildViewById(rootView, id);
+      if (imagesContainer == null) {
+        break missingId;
+      }
+
       id = R.id.tvMessageText;
       TextView tvMessageText = ViewBindings.findChildViewById(rootView, id);
       if (tvMessageText == null) {
@@ -71,7 +82,8 @@ public final class ItemMessageIncomingBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ItemMessageIncomingBinding((LinearLayout) rootView, tvMessageText, tvMessageTime);
+      return new ItemMessageIncomingBinding((LinearLayout) rootView, imagesContainer, tvMessageText,
+          tvMessageTime);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

@@ -5,6 +5,13 @@
     <color name="asylum_red_ripple">#228B1A1A</color>
     <color name="background_white">#FFFFFF</color>
     <color name="button_text">#FFFFFF</color>
+    <color name="dark_background">#121212</color>
+    <color name="dark_divider">#333333</color>
+    <color name="dark_input_background">#2A2A2A</color>
+    <color name="dark_surface">#1E1E1E</color>
+    <color name="dark_surface_elevated">#2C2C2C</color>
+    <color name="dark_text_primary">#EFEFEF</color>
+    <color name="dark_text_secondary">#AAAAAA</color>
     <color name="error_red">#D32F2F</color>
     <color name="input_background">#F2F2F2</color>
     <color name="text_hint">#AAAAAA</color>
@@ -52,6 +59,13 @@
         <item name="android:windowBackground">@drawable/bg_input_field</item>
         <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.Asylum.Medium</item>
     </style>
+    <style name="AsylumAlertDialogTheme.Dark" parent="Theme.MaterialComponents.Dialog.Alert">
+        <item name="colorPrimary">@color/asylum_red</item>
+        <item name="colorAccent">@color/asylum_red</item>
+        <item name="android:windowBackground">@color/dark_surface</item>
+        <item name="android:textColorPrimary">@color/dark_text_primary</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.Asylum.Medium</item>
+    </style>
     <style name="AsylumButton" parent="Widget.MaterialComponents.Button">
         <item name="android:insetTop">0dp</item>
         <item name="android:insetBottom">0dp</item>
@@ -97,8 +111,15 @@
     <style name="AsylumPopupMenu" parent="Widget.AppCompat.PopupMenu">
         <item name="android:popupBackground">@drawable/bg_input_field</item>
     </style>
+    <style name="AsylumPopupMenu.Dark" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:popupBackground">@color/dark_surface_elevated</item>
+    </style>
     <style name="AsylumPopupTextAppearance" parent="TextAppearance.AppCompat.Menu">
         <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+    <style name="AsylumPopupTextAppearance.Dark" parent="TextAppearance.AppCompat.Menu">
+        <item name="android:textColor">@color/dark_text_primary</item>
         <item name="android:textSize">14sp</item>
     </style>
     <style name="AsylumSubtitle">
@@ -110,6 +131,9 @@
         <item name="android:textSize">32sp</item>
         <item name="android:textColor">#333333</item>
         <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+    <style name="RoundedCorner">
+        <item name="cornerSize">8dp</item>
     </style>
     <style name="ShapeAppearance.Asylum.Medium" parent="ShapeAppearance.MaterialComponents.MediumComponent">
         <item name="cornerSize">12dp</item>
@@ -131,7 +155,27 @@
         
         <item name="alertDialogTheme">@style/AsylumAlertDialogTheme</item>
     </style>
+    <style name="Theme.AsylumApp.Dark" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="colorPrimary">@color/asylum_red</item>
+        <item name="colorPrimaryDark">@color/asylum_red_dark</item>
+        <item name="colorAccent">@color/asylum_red</item>
+        <item name="android:windowBackground">@color/dark_background</item>
+        <item name="android:statusBarColor">@color/dark_surface</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:navigationBarColor">@color/dark_background</item>
+
+        
+        <item name="popupMenuStyle">@style/AsylumPopupMenu.Dark</item>
+        <item name="android:textAppearanceLargePopupMenu">@style/AsylumPopupTextAppearance.Dark</item>
+        <item name="android:textAppearanceSmallPopupMenu">@style/AsylumPopupTextAppearance.Dark</item>
+
+        
+        <item name="alertDialogTheme">@style/AsylumAlertDialogTheme.Dark</item>
+    </style>
     <style name="Theme.AsylumApp.Splash" parent="Theme.AsylumApp">
         <item name="android:windowBackground">@color/background_white</item>
+    </style>
+    <style name="Theme.AsylumApp.Splash.Dark" parent="Theme.AsylumApp.Dark">
+        <item name="android:windowBackground">@color/dark_background</item>
     </style>
 </resources>

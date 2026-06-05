@@ -8,24 +8,24 @@
         "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\drawable\\ic_mute.xml"
     },
     {
-        "merged": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-merged_res-35:\\drawable_bg_status_bubble.xml.flat",
-        "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\drawable\\bg_status_bubble.xml"
+        "merged": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-merged_res-35:\\drawable_ic_profile_filled.xml.flat",
+        "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\drawable\\ic_profile_filled.xml"
     },
     {
-        "merged": "com.asylum.app-merged_res-35:/drawable_ic_profile_filled.xml.flat",
-        "source": "com.asylum.app-main-37:/drawable/ic_profile_filled.xml"
+        "merged": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-merged_res-35:\\drawable_bg_status_bubble.xml.flat",
+        "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\drawable\\bg_status_bubble.xml"
     },
     {
         "merged": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-merged_res-35:\\layout_item_message_incoming.xml.flat",
         "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\layout\\item_message_incoming.xml"
     },
     {
-        "merged": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-merged_res-35:\\drawable_ic_sort_custom.xml.flat",
-        "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\drawable\\ic_sort_custom.xml"
+        "merged": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-merged_res-35:\\drawable_bg_tag.xml.flat",
+        "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\drawable\\bg_tag.xml"
     },
     {
-        "merged": "com.asylum.app-merged_res-35:/layout_activity_main.xml.flat",
-        "source": "com.asylum.app-main-37:/layout/activity_main.xml"
+        "merged": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-merged_res-35:\\drawable_ic_sort_custom.xml.flat",
+        "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\drawable\\ic_sort_custom.xml"
     },
     {
         "merged": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-merged_res-35:\\drawable_ic_lock.xml.flat",
@@ -40,6 +40,14 @@
         "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\layout\\fragment_posts.xml"
     },
     {
+        "merged": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-merged_res-35:\\drawable_nav_chats_selector.xml.flat",
+        "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\drawable\\nav_chats_selector.xml"
+    },
+    {
+        "merged": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-merged_res-35:\\drawable_ic_chats_filled.xml.flat",
+        "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\drawable\\ic_chats_filled.xml"
+    },
+    {
         "merged": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-merged_res-35:\\drawable_bg_circle.xml.flat",
         "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\drawable\\bg_circle.xml"
     },
@@ -48,8 +56,12 @@
         "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\layout\\activity_search.xml"
     },
     {
-        "merged": "com.asylum.app-merged_res-35:/drawable_nav_profile_selector.xml.flat",
-        "source": "com.asylum.app-main-37:/drawable/nav_profile_selector.xml"
+        "merged": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-merged_res-35:\\drawable_nav_profile_selector.xml.flat",
+        "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\drawable\\nav_profile_selector.xml"
+    },
+    {
+        "merged": "com.asylum.app-merged_res-35:/drawable_bg_status_bubble.xml.flat",
+        "source": "com.asylum.app-main-37:/drawable/bg_status_bubble.xml"
     },
     {
         "merged": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-merged_res-35:\\drawable_ic_emoji.xml.flat",
@@ -72,20 +84,16 @@
         "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\drawable\\ic_chats.xml"
     },
     {
-        "merged": "com.asylum.app-merged_res-35:/drawable_ic_posts_filled.xml.flat",
-        "source": "com.asylum.app-main-37:/drawable/ic_posts_filled.xml"
-    },
-    {
-        "merged": "com.asylum.app-merged_res-35:/drawable_ic_posts.xml.flat",
-        "source": "com.asylum.app-main-37:/drawable/ic_posts.xml"
-    },
-    {
         "merged": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-merged_res-35:\\drawable_ic_attach.xml.flat",
         "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\drawable\\ic_attach.xml"
     },
     {
         "merged": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-merged_res-35:\\layout_activity_chat.xml.flat",
         "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\layout\\activity_chat.xml"
+    },
+    {
+        "merged": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-merged_res-35:\\drawable_nav_posts_selector.xml.flat",
+        "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\drawable\\nav_posts_selector.xml"
     },
     {
         "merged": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-merged_res-35:\\layout_activity_post.xml.flat",
@@ -104,10 +112,6 @@
         "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\drawable\\ic_profile.xml"
     },
     {
-        "merged": "com.asylum.app-merged_res-35:/drawable_ic_chats_filled.xml.flat",
-        "source": "com.asylum.app-main-37:/drawable/ic_chats_filled.xml"
-    },
-    {
         "merged": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-merged_res-35:\\drawable_ic_fire.xml.flat",
         "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\drawable\\ic_fire.xml"
     },
@@ -124,12 +128,12 @@
         "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\layout\\fragment_profile.xml"
     },
     {
-        "merged": "com.asylum.app-merged_res-35:/drawable_nav_posts_selector.xml.flat",
-        "source": "com.asylum.app-main-37:/drawable/nav_posts_selector.xml"
+        "merged": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-merged_res-35:\\layout_item_attachment_preview.xml.flat",
+        "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\layout\\item_attachment_preview.xml"
     },
     {
-        "merged": "com.asylum.app-merged_res-35:/layout_fragment_posts.xml.flat",
-        "source": "com.asylum.app-main-37:/layout/fragment_posts.xml"
+        "merged": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-merged_res-35:\\color_nav_item_color.xml.flat",
+        "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\color\\nav_item_color.xml"
     },
     {
         "merged": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-merged_res-35:\\drawable_bg_bubble_outgoing.xml.flat",
@@ -144,20 +148,8 @@
         "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\layout\\activity_register.xml"
     },
     {
-        "merged": "com.asylum.app-merged_res-35:/color_nav_item_color.xml.flat",
-        "source": "com.asylum.app-main-37:/color/nav_item_color.xml"
-    },
-    {
         "merged": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-merged_res-35:\\drawable_btn_primary_background.xml.flat",
         "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\drawable\\btn_primary_background.xml"
-    },
-    {
-        "merged": "com.asylum.app-merged_res-35:/drawable_nav_chats_selector.xml.flat",
-        "source": "com.asylum.app-main-37:/drawable/nav_chats_selector.xml"
-    },
-    {
-        "merged": "com.asylum.app-merged_res-35:/layout_activity_select_contact.xml.flat",
-        "source": "com.asylum.app-main-37:/layout/activity_select_contact.xml"
     },
     {
         "merged": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-merged_res-35:\\layout_activity_settings.xml.flat",
@@ -166,6 +158,10 @@
     {
         "merged": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-merged_res-35:\\layout_activity_create_post.xml.flat",
         "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\layout\\activity_create_post.xml"
+    },
+    {
+        "merged": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-merged_res-35:\\drawable_ic_posts_filled.xml.flat",
+        "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\drawable\\ic_posts_filled.xml"
     },
     {
         "merged": "com.asylum.app-merged_res-35:/layout_fragment_profile.xml.flat",
@@ -192,16 +188,8 @@
         "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\drawable\\ic_asylum_logo.xml"
     },
     {
-        "merged": "com.asylum.app-merged_res-35:/menu_bottom_nav_menu.xml.flat",
-        "source": "com.asylum.app-main-37:/menu/bottom_nav_menu.xml"
-    },
-    {
         "merged": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-merged_res-35:\\layout_activity_login.xml.flat",
         "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\layout\\activity_login.xml"
-    },
-    {
-        "merged": "com.asylum.app-merged_res-35:/drawable_ic_profile.xml.flat",
-        "source": "com.asylum.app-main-37:/drawable/ic_profile.xml"
     },
     {
         "merged": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-merged_res-35:\\drawable_ic_posts.xml.flat",
@@ -212,11 +200,11 @@
         "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\mipmap-hdpi\\ic_launcher_round.xml"
     },
     {
-        "merged": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-merged_res-35:\\layout_item_contact.xml.flat",
-        "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\layout\\item_contact.xml"
-    },
-    {
         "merged": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-merged_res-35:\\layout_item_post.xml.flat",
         "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\layout\\item_post.xml"
+    },
+    {
+        "merged": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-merged_res-35:\\layout_item_contact.xml.flat",
+        "source": "C:\\Users\\373\\.gradle\\daemon\\9.0-milestone-1\\com.asylum.app-main-37:\\layout\\item_contact.xml"
     }
 ]

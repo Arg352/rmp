@@ -1376,6 +1376,13 @@ color cardview_dark_background
 color cardview_light_background
 color cardview_shadow_end_color
 color cardview_shadow_start_color
+color dark_background
+color dark_divider
+color dark_input_background
+color dark_surface
+color dark_surface_elevated
+color dark_text_primary
+color dark_text_secondary
 color design_bottom_navigation_shadow_color
 color design_box_stroke_color
 color design_dark_default_color_background
@@ -3000,6 +3007,7 @@ drawable bg_bubble_outgoing
 drawable bg_circle
 drawable bg_input_field
 drawable bg_status_bubble
+drawable bg_tag
 drawable btn_checkbox_checked_mtrl
 drawable btn_checkbox_checked_to_unchecked_mtrl_animation
 drawable btn_checkbox_unchecked_mtrl
@@ -3202,10 +3210,13 @@ id anticipate
 id arc
 id asConfigured
 id async
+id attachmentPreviewArea
+id attachmentsContainer
 id auto
 id autoComplete
 id autoCompleteToEnd
 id autoCompleteToStart
+id avatarContainer
 id barrier
 id baseline
 id beginOnFirstDraw
@@ -3221,10 +3232,14 @@ id bounceStart
 id btnAttach
 id btnAttachFile
 id btnBack
+id btnChangeAvatar
 id btnCreatePost
+id btnDeletePost
 id btnDownload1
 id btnDownload2
 id btnEditName
+id btnEditProfile
+id btnEditStatus
 id btnFilterUser
 id btnFriends
 id btnGuestLogin
@@ -3234,6 +3249,7 @@ id btnMute
 id btnMyPosts
 id btnNewChatSearch
 id btnRegister
+id btnRemove
 id btnSearchHeader
 id btnSend
 id btnSettingsBottom
@@ -3262,7 +3278,6 @@ id checkbox
 id checked
 id chronometer
 id circle_center
-id clProfileInfo
 id clear_text
 id clip_horizontal
 id clip_vertical
@@ -3306,6 +3321,8 @@ id disablePostScroll
 id disableScroll
 id disjoint
 id divider
+id dot1
+id dot2
 id dragAnticlockwise
 id dragClockwise
 id dragDown
@@ -3383,6 +3400,7 @@ id ifRoom
 id ignore
 id ignoreRequest
 id image
+id imagesContainer
 id immediateStop
 id included
 id indeterminate
@@ -3400,6 +3418,7 @@ id ivLogo
 id ivMuteStatus
 id ivPostImage1
 id ivPostImage2
+id ivPreview
 id ivSortIcon
 id ivUserAvatar
 id jumpToEnd
@@ -3615,12 +3634,14 @@ id startToEnd
 id startVertical
 id staticLayout
 id staticPostLayout
+id statusBubble
 id stop
 id stretch
 id submenuarrow
 id submit_area
 id supportScrollUp
 id swipeRefresh
+id switchDarkMode
 id switchFollows
 id switchGroups
 id switchLikes
@@ -3710,7 +3731,7 @@ id tvPostTitle
 id tvRegisterLink
 id tvSort
 id tvStatus
-id tvStatusBubble
+id tvStatusText
 id tvSubtitle
 id tvTime
 id tvTimeAgo
@@ -3727,8 +3748,6 @@ id uniform
 id unlabeled
 id up
 id useLogo
-id vTailLarge
-id vTailSmall
 id vertical_only
 id viewPager
 id view_offset_helper
@@ -3892,6 +3911,7 @@ layout dialog_add_friend
 layout fragment_chats
 layout fragment_posts
 layout fragment_profile
+layout item_attachment_preview
 layout item_chat
 layout item_contact
 layout item_message_incoming
@@ -4156,13 +4176,16 @@ style Animation_Material3_SideSheetDialog_Left
 style Animation_Material3_SideSheetDialog_Right
 style Animation_MaterialComponents_BottomSheetDialog
 style AsylumAlertDialogTheme
+style AsylumAlertDialogTheme_Dark
 style AsylumButton
 style AsylumEditText
 style AsylumInputLayout
 style AsylumLabel
 style AsylumLink
 style AsylumPopupMenu
+style AsylumPopupMenu_Dark
 style AsylumPopupTextAppearance
+style AsylumPopupTextAppearance_Dark
 style AsylumSubtitle
 style AsylumTitle
 style Base_AlertDialog_AppCompat
@@ -4478,6 +4501,7 @@ style Platform_V21_AppCompat_Light
 style Platform_V25_AppCompat
 style Platform_V25_AppCompat_Light
 style Platform_Widget_AppCompat_Spinner
+style RoundedCorner
 style RtlOverlay_DialogWindowTitle_AppCompat
 style RtlOverlay_Widget_AppCompat_ActionBar_TitleItem
 style RtlOverlay_Widget_AppCompat_DialogTitle_Icon
@@ -4701,7 +4725,9 @@ style Theme_AppCompat_Light_DialogWhenLarge
 style Theme_AppCompat_Light_NoActionBar
 style Theme_AppCompat_NoActionBar
 style Theme_AsylumApp
+style Theme_AsylumApp_Dark
 style Theme_AsylumApp_Splash
+style Theme_AsylumApp_Splash_Dark
 style Theme_Design
 style Theme_Design_BottomSheetDialog
 style Theme_Design_Light

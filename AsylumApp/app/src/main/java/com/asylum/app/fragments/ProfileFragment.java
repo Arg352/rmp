@@ -1,6 +1,8 @@
 package com.asylum.app.fragments;
 
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -23,13 +27,19 @@ import com.asylum.app.R;
 import com.asylum.app.SettingsActivity;
 import com.asylum.app.adapters.SearchUserAdapter;
 import com.asylum.app.api.ApiService;
+import com.asylum.app.api.MediaUploadResponse;
 import com.asylum.app.api.RetrofitClient;
+import com.asylum.app.models.UpdateSettingsRequest;
 import com.asylum.app.models.User;
 import com.asylum.app.models.UserProfile;
 import com.asylum.app.utils.SessionManager;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -37,13 +47,16 @@ import java.util.List;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ProfileFragment extends Fragment {
 
-    private TextView tvFullName, tvUsername, tvAvatarLetter, tvFriendsCount;
+    private TextView tvFullName, tvUsername, tvAvatarLetter, tvFriendsCount, tvStatusText;
     private CircleImageView ivAvatar;
 
     private SessionManager sessionManager;
@@ -52,6 +65,15 @@ public class ProfileFragment extends Fragment {
 
     private List<UserProfile> cachedFollowing = new ArrayList<>();
     private List<UserProfile> cachedFollowers = new ArrayList<>();
+
+    private final ActivityResultLauncher<String> imagePickerLauncher = registerForActivityResult(
+            new ActivityResultContracts.GetContent(),
+            uri -> {
+                if (uri != null) {
+                    uploadAvatar(uri);
+                }
+            }
+    );
 
     @Nullable
     @Override
@@ -66,12 +88,15 @@ public class ProfileFragment extends Fragment {
         tvUsername = view.findViewById(R.id.tvUsername);
         tvAvatarLetter = view.findViewById(R.id.tvAvatarLetter);
         tvFriendsCount = view.findViewById(R.id.tvFriendsCount);
+        tvStatusText = view.findViewById(R.id.tvStatusText);
         ivAvatar = view.findViewById(R.id.ivAvatar);
 
         ImageView btnLogout = view.findViewById(R.id.btnLogout);
         View btnFriends = view.findViewById(R.id.btnFriends);
         View btnMyPosts = view.findViewById(R.id.btnMyPosts);
         View btnSettingsBottom = view.findViewById(R.id.btnSettingsBottom);
+        View btnEditStatus = view.findViewById(R.id.btnEditStatus);
+        View btnEditProfile = view.findViewById(R.id.btnEditProfile);
 
         if (btnLogout != null) {
             btnLogout.setOnClickListener(v -> {
@@ -102,6 +127,21 @@ public class ProfileFragment extends Fragment {
             });
         }
 
+        if (btnEditStatus != null) {
+            btnEditStatus.setOnClickListener(v -> showEditStatusDialog());
+        }
+        
+        if (btnEditProfile != null) {
+            btnEditProfile.setOnClickListener(v -> {
+                Intent intent = new Intent(getActivity(), SettingsActivity.class);
+                startActivity(intent);
+            });
+        }
+
+        if (ivAvatar != null) {
+            ivAvatar.setOnClickListener(v -> imagePickerLauncher.launch("image/*"));
+        }
+
         loadProfile();
         return view;
     }
@@ -109,9 +149,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (currentProfile != null) {
-            loadProfile();
-        }
+        loadProfile();
     }
 
     private void loadProfile() {
@@ -163,19 +201,114 @@ public class ProfileFragment extends Fragment {
 
         if (tvFullName != null) tvFullName.setText(displayName);
         if (tvUsername != null) tvUsername.setText("@" + profile.getUsername());
+        
+        if (tvStatusText != null) {
+            if (profile.getBio() != null && !profile.getBio().isEmpty()) {
+                tvStatusText.setText(profile.getBio());
+            } else {
+                tvStatusText.setText("Хотите добавить статус?");
+            }
+        }
 
-        if (profile.getAvatarUrl() != null && !profile.getAvatarUrl().isEmpty()) {
+        String avatarUrl = profile.getAvatarUrl();
+        if (avatarUrl != null && !avatarUrl.isEmpty()) {
+            if (avatarUrl.startsWith("/")) {
+                avatarUrl = RetrofitClient.BASE_URL + avatarUrl.substring(1);
+            }
+            
             if (ivAvatar != null) {
                 ivAvatar.setVisibility(View.VISIBLE);
                 if (tvAvatarLetter != null) tvAvatarLetter.setVisibility(View.INVISIBLE);
-                Glide.with(this).load(profile.getAvatarUrl()).into(ivAvatar);
+                Glide.with(this)
+                        .load(avatarUrl)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .into(ivAvatar);
             }
         } else {
             if (tvAvatarLetter != null) {
                 tvAvatarLetter.setVisibility(View.VISIBLE);
-                tvAvatarLetter.setText(displayName.substring(0, 1).toUpperCase());
+                tvAvatarLetter.setText(displayName.isEmpty() ? "?" : displayName.substring(0, 1).toUpperCase());
             }
+            if (ivAvatar != null) ivAvatar.setImageResource(R.color.asylum_red);
         }
+    }
+
+    private void showEditStatusDialog() {
+        if (currentProfile == null) return;
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Изменить статус");
+        final EditText input = new EditText(requireContext());
+        input.setText(currentProfile.getBio());
+        builder.setView(input);
+        builder.setPositiveButton("ОК", (dialog, which) -> updateProfile(new UpdateSettingsRequest().setBio(input.getText().toString().trim())));
+        builder.setNegativeButton("Отмена", null);
+        builder.show();
+    }
+
+    private void uploadAvatar(Uri uri) {
+        String token = sessionManager.getBearerToken();
+        if (token == null) return;
+
+        try {
+            InputStream is = requireContext().getContentResolver().openInputStream(uri);
+            if (is == null) return;
+            byte[] bytes = getBytes(is);
+            is.close();
+            
+            String mimeType = requireContext().getContentResolver().getType(uri);
+            if (mimeType == null) mimeType = "image/jpeg";
+            
+            RequestBody requestBody = RequestBody.create(MediaType.parse(mimeType), bytes);
+            MultipartBody.Part body = MultipartBody.Part.createFormData("images", "avatar_" + System.currentTimeMillis() + ".jpg", requestBody);
+            List<MultipartBody.Part> list = new ArrayList<>();
+            list.add(body);
+
+            apiService.uploadImages(token, list).enqueue(new Callback<MediaUploadResponse>() {
+                @Override
+                public void onResponse(Call<MediaUploadResponse> call, Response<MediaUploadResponse> response) {
+                    if (response.isSuccessful() && response.body() != null && !response.body().getUrls().isEmpty()) {
+                        String newUrl = response.body().getUrls().get(0);
+                        updateProfile(new UpdateSettingsRequest().setAvatarUrl(newUrl));
+                    } else {
+                        Toast.makeText(getContext(), "Ошибка загрузки: " + response.code(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+                @Override public void onFailure(Call<MediaUploadResponse> call, Throwable t) {
+                    Toast.makeText(getContext(), "Ошибка сети: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "Ошибка при чтении файла", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private byte[] getBytes(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int len;
+        while ((len = inputStream.read(buffer)) != -1) {
+            byteBuffer.write(buffer, 0, len);
+        }
+        return byteBuffer.toByteArray();
+    }
+
+    private void updateProfile(UpdateSettingsRequest request) {
+        String token = sessionManager.getBearerToken();
+        if (token == null) return;
+
+        apiService.updateSettings(token, request).enqueue(new Callback<UserProfile>() {
+            @Override
+            public void onResponse(Call<UserProfile> call, Response<UserProfile> response) {
+                if (response.isSuccessful()) {
+                    loadProfile();
+                } else {
+                    Toast.makeText(getContext(), "Ошибка обновления: " + response.code(), Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override public void onFailure(Call<UserProfile> call, Throwable t) {
+                Toast.makeText(getContext(), "Ошибка сети", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void showFriendsDialog() {
@@ -188,12 +321,10 @@ public class ProfileFragment extends Fragment {
         RecyclerView rvSuggestions = view.findViewById(R.id.rvSuggestions);
         rvSuggestions.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // Мы будем использовать финальную ссылку на адаптер внутри listener
         final SearchUserAdapter[] adapterContainer = new SearchUserAdapter[1];
         
         adapterContainer[0] = new SearchUserAdapter(new ArrayList<>(), () -> {
             loadFriendsCount(sessionManager.getBearerToken());
-            // Обновляем данные и список
             loadFriendsAndRequests(adapterContainer[0]);
         });
         
